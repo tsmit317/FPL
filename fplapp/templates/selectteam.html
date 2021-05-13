@@ -1,0 +1,23 @@
+{% extends 'fplbase.html' %}
+
+{% block head %}
+{% endblock head%}
+
+{% block body %}
+
+<div class="container">
+    <div class="row justify-content-md-center pt-3">
+        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form bg-light p-4 home-form border border-info rounded-4 shadow">
+            <div class="d-grid gap-2">
+                {% for member, id in leagueMembers.items() %}
+                <button type="button" class="btn btn-outline-primary btn-lg">{{ member }}</button>
+            
+                {% endfor %}
+           </div>
+        </div>
+    </div>
+    
+</div>
+
+
+{% endblock %}

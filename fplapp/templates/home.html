@@ -1,0 +1,27 @@
+{% extends 'fplbase.html' %}
+
+{% block head %}
+{% endblock head%}
+
+{% block body %}
+
+<div class="container">
+    <div class="row justify-content-md-center pt-3">
+        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form bg-light p-4 home-form border border-info rounded-4 shadow">
+
+            <form method='POST' action='/selectteam'>
+                <div class="mb-3">
+                  <label for="leagueID" class="form-label">Enter league ID</label>
+                  <input type="text" class="form-control" id="leagueID" name="leagueID" aria-describedby="leagueIDHelp">
+                 
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+        </div>
+    </div>
+    
+</div>
+
+
+{% endblock %}
