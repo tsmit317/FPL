@@ -1,15 +1,6 @@
 import json
 import requests
 
-url = "https://fantasy.premierleague.com/api/leagues-classic/889946/standings/"
-url_team = "https://fantasy.premierleague.com/api/entry/3557697/"
-r = requests.get(url_team)
-
-
-j = r.json()
-
-url = 'https://fantasy.premierleague.com/api/leagues-classic/'
-
 
 
 def get_league_teams(leagueID):
@@ -24,5 +15,17 @@ def get_league_teams(leagueID):
 
     return newdict
 
-def determine_rank(userID):
-    
+def get_user_leagues_info(userID):
+    newdict = {}
+
+    url = "https://fantasy.premierleague.com/api/entry/" + str(userID) + "/"
+    req = requests.get(url)
+    if req.status_code != 404:
+        l=req.json()
+        for i in l['leagues']['classic']:
+            newdict[i['name']] = i['entry_rank']
+
+        return newdict
+    else:
+        return False
+
