@@ -24,7 +24,10 @@
       <h1 class="display-1">Am I Winning My FPL League?</h1>
     </div>
       
-    
+  <div class = "bg-light">
+    <canvas id="myChart"></canvas>
+  </div>
+ 
   </div>
     <div class="row justify-content-md-center pt-3">
         <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form bg-light p-4 home-form border border-info border-2 rounded-3 shadow">
@@ -67,20 +70,52 @@
     
 </div>
 
+
 <script>
   var forms = document.querySelectorAll('.needs-validation');
 
  // Loop over them and prevent submission
- Array.prototype.slice.call(forms)
- .forEach(function (form) {
-     form.addEventListener('submit', function (event) {
-     if (!form.checkValidity()) {
-         event.preventDefault();
-         event.stopPropagation();
-     }
+Array.prototype.slice.call(forms)
+.forEach(function (form) {
+    form.addEventListener('submit', function (event) {
+    if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
 
-     form.classList.add('was-validated');
-     }, false);
- });
+    form.classList.add('was-validated');
+    }, false);
+});
 </script>
+
+<script>
+let datajs = JSON.parse({{data | tojson}});
+let labels =  datajs[0]['gw'];
+let datasetValue = [];
+for(let i = 0; i < datajs.length; i++){
+  let randomColorNumber = Math.floor(Math.random()*16777215).toString(16);
+	let val = {
+          label: datajs[i]['name'],
+          data: datajs[i]['total_points'],
+          fill: false,
+          borderColor: '#' + randomColorNumber,
+          tension: 0.1
+		}
+	
+	datasetValue.push(val);
+};
+
+const data = {
+  labels: labels,
+  datasets: datasetValue
+}
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    
+});
+</script>
+
 {% endblock %}
