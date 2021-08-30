@@ -21,7 +21,7 @@
 <div class="container">
   <div class="row justify-content-md-center pt-3">
     <div class="col text-center">
-      <h1 class="display-1">Am I Winning My FPL League?</h1>
+      <h1 class="display-1">FPL Dashboard</h1>
     </div>
     
     
@@ -29,12 +29,24 @@
       <!--Canvas 1-->
       
       <div class="canvas_wrapper">
-          <canvas id='bench_points'class="canvas chart-area"></canvas>
+          <canvas id='myChart1'class="canvas chart-area"></canvas>
+          <select class = "selectData1" id ='selectData1'>
+            <option value = "total_bench_points">Total Bench Points</option>
+            <option value = "total_points">Total Points</option>
+            <option value = "team_value">Team Value</option>
+          </select>
+
+          
       </div>
       <!--Canvas 2-->
       
       <div class="canvas_wrapper">
-          <canvas id= 'myChart' class="canvas chart-area"></canvas>
+          <canvas id= 'myChart2' class="canvas chart-area"></canvas>
+          <select class = "selectData2" id ='selectData2'>
+            <option value = "gw_points">Game Week Points</option>
+            <option value = "gw_bench_points">Game Week Bench Points</option>
+            <option value = "gw_transfers">Game Week Transfers</option>
+          </select>
       </div>
     </div>
 
@@ -103,6 +115,8 @@ Array.prototype.slice.call(forms)
 let datajs = JSON.parse({{data | tojson}});
 let labels =  datajs[0]['gw'];
 let colors = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
+
+
 function createLineDataset(dataName){
   let datasetValue = [];
   for(let i = 0; i < datajs.length; i++){
@@ -124,8 +138,9 @@ const data = {
   datasets: createLineDataset('total_points')
 }
 
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
+var ctx = document.getElementById('myChart1').getContext('2d');
+
+var myChart1 = new Chart(ctx, {
     type: 'line',
     data: data,
     options: {
@@ -133,13 +148,13 @@ var myChart = new Chart(ctx, {
             y: {
               title:{
                 display: true,
-                text: 'y'
+                text: 'Points'
                 }
             },
             x: {
               title:{
                 display: true,
-                text: 'x'
+                text: 'Game Week'
                 }
             },
       },
@@ -150,7 +165,7 @@ var myChart = new Chart(ctx, {
         title: {
                 display: true,
                 font: {style: 'bold'},
-                text: 'Custom Chart Title',
+                text: 'Total Points',
                 padding: {
                     top: 10,
                     bottom: 30
@@ -161,31 +176,82 @@ var myChart = new Chart(ctx, {
     
 });
 
+
+const selectElement1 = document.getElementById('selectData1');
+const selectElement2 = document.getElementById('selectData2');
+
+selectElement1.addEventListener('change', (event) => {
+  title  = String(selectElement1.options[selectElement1.selectedIndex].text);
+  dataChange = {
+    labels: labels,
+    datasets: createLineDataset(String(selectElement1.value))
+    
+  }
+  myChart1.data = dataChange;
+  myChart1.options.scales.y.title.text = title.split(" ").splice(-1);
+  myChart1.options.plugins.title.text = title;
+  myChart1.update();
+
+});
+
+selectElement2.addEventListener('change', (event) => {
+  title  = String(selectElement2.options[selectElement2.selectedIndex].text);
+  dataChange = {
+    labels: labels,
+    datasets: createLineDataset(String(selectElement2.value))
+    
+  }
+  myChart2.data = dataChange;
+  myChart2.options.scales.y.title.text = title.split(" ").splice(-1);
+  myChart2.options.plugins.title.text = title;
+  myChart2.update();
+
+});
+
+
+function changeChart(){
+  
+}
+
+
 const data2 = {
   labels: labels,
-  datasets: createLineDataset('total_bench_points')
+  datasets: createLineDataset('gw_points')
 }
-var ctx = document.getElementById('bench_points').getContext('2d');
-var myChart = new Chart(ctx, {
+var ctx = document.getElementById('myChart2').getContext('2d');
+var myChart2 = new Chart(ctx, {
     type: 'line',
     data: data2,
     options: {
       scales: {
-            y: {
-              title:{
-                display: true,
-                text: 'y'
-                }
-            },
-            x: {
-              title:{
-                display: true,
-                text: 'x'
-                }
-            },
-
+        y: {
+          title:{
+            display: true,
+            text: 'y'
+            }
+        },
+        x: {
+          title:{
+            display: true,
+            text: 'Game Week'
+            }
         }
-    }
+      },
+    plugins: {
+      legend:{
+        position: 'left',
+      },
+      title: {
+              display: true,
+              font: {style: 'bold'},
+              text: 'Game Week Points',
+              padding: {
+                  top: 10,
+                  bottom: 30
+              }
+          }
+      }
+  }
     
 });
 
