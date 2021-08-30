@@ -34,13 +34,14 @@
             <option value = "total_bench_points">Total Bench Points</option>
             <option value = "total_points">Total Points</option>
             <option value = "team_value">Team Value</option>
+            <option value = "total_transfers">Total Transfers</option>
           </select>
 
           
       </div>
       <!--Canvas 2-->
       
-      <div class="canvas_wrapper">
+      <div class="canvas_wrapper pb-3">
           <canvas id= 'myChart2' class="canvas chart-area"></canvas>
           <select class = "selectData2" id ='selectData2'>
             <option value = "gw_points">Game Week Points</option>
@@ -133,16 +134,16 @@ function createLineDataset(dataName){
   };
   return datasetValue
 }
-const data = {
-  labels: labels,
-  datasets: createLineDataset('total_points')
-}
+
 
 var ctx = document.getElementById('myChart1').getContext('2d');
 
 var myChart1 = new Chart(ctx, {
     type: 'line',
-    data: data,
+    data: {
+      labels: labels,
+      datasets: createLineDataset('total_points')
+    },
     options: {
       scales: {
             y: {
@@ -164,7 +165,8 @@ var myChart1 = new Chart(ctx, {
         },
         title: {
                 display: true,
-                font: {style: 'bold'},
+                align: 'center',
+                font: {size: 18},
                 text: 'Total Points',
                 padding: {
                     top: 10,
@@ -180,78 +182,67 @@ var myChart1 = new Chart(ctx, {
 const selectElement1 = document.getElementById('selectData1');
 const selectElement2 = document.getElementById('selectData2');
 
+function changeChart(data_string, title, chart){
+  dataChange = {
+      labels: labels,
+      datasets: createLineDataset(data_string)
+  }
+  chart.data = dataChange;
+  chart.options.scales.y.title.text = title.split(" ").splice(-1);
+  chart.options.plugins.title.text = title;
+  chart.update();
+}
+
 selectElement1.addEventListener('change', (event) => {
-  title  = String(selectElement1.options[selectElement1.selectedIndex].text);
-  dataChange = {
-    labels: labels,
-    datasets: createLineDataset(String(selectElement1.value))
-    
-  }
-  myChart1.data = dataChange;
-  myChart1.options.scales.y.title.text = title.split(" ").splice(-1);
-  myChart1.options.plugins.title.text = title;
-  myChart1.update();
-
+  changeChart(selectElement1.value, String(selectElement1.options[selectElement1.selectedIndex].text), myChart1);
 });
-
 selectElement2.addEventListener('change', (event) => {
-  title  = String(selectElement2.options[selectElement2.selectedIndex].text);
-  dataChange = {
-    labels: labels,
-    datasets: createLineDataset(String(selectElement2.value))
-    
-  }
-  myChart2.data = dataChange;
-  myChart2.options.scales.y.title.text = title.split(" ").splice(-1);
-  myChart2.options.plugins.title.text = title;
-  myChart2.update();
-
+  changeChart(selectElement2.value, String(selectElement2.options[selectElement2.selectedIndex].text), myChart2);
 });
 
 
-function changeChart(){
-  
-}
 
-
-const data2 = {
-  labels: labels,
-  datasets: createLineDataset('gw_points')
-}
 var ctx = document.getElementById('myChart2').getContext('2d');
 var myChart2 = new Chart(ctx, {
     type: 'line',
-    data: data2,
+    data: {
+      labels: labels,
+      datasets: createLineDataset('gw_points')
+    },
     options: {
       scales: {
-        y: {
-          title:{
-            display: true,
-            text: 'y'
-            }
+            y: {
+              title:{
+                display: true,
+                text: 'Points'
+                }
+            },
+            x: {
+              title:{
+                display: true,
+                text: 'Game Week'
+                }
+            },
+      },
+      
+      plugins: {
+        legend:{
+          position: 'left',
         },
-        x: {
-          title:{
-            display: true,
-            text: 'Game Week'
+        title: {
+                display: true,
+                color: '#000000',
+
+                font: {size: 18},
+                text: 'Game Week Points',
+                padding: {
+                    top: 10,
+                    bottom: 30
+                }
             }
-        }
-      },
-    plugins: {
-      legend:{
-        position: 'left',
-      },
-      title: {
-              display: true,
-              font: {style: 'bold'},
-              text: 'Game Week Points',
-              padding: {
-                  top: 10,
-                  bottom: 30
-              }
-          }
       }
-  }
+    }
+  
     
 });
 
