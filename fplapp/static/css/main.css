@@ -5,3 +5,22 @@ body{
 .rank-response{
     font-weight: bold;
 }
+
+.main_wrapper{
+    display: flex;
+    flex-wrap: row;
+    justify-content: center;
+}
+.canvas_wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+}
+.canvas{
+    width: 100%;
+    height: auto;
+    border: 1px solid black;
+}

@@ -23,15 +23,26 @@
     <div class="col text-center">
       <h1 class="display-1">Am I Winning My FPL League?</h1>
     </div>
+    
+    
+    <div class="main_wrapper">
+      <!--Canvas 1-->
       
-  <div class = "bg-light">
-    <canvas id="myChart"></canvas>
-  </div>
- 
-  </div>
+      <div class="canvas_wrapper">
+          <canvas id='bench_points'class="canvas chart-area"></canvas>
+      </div>
+      <!--Canvas 2-->
+      
+      <div class="canvas_wrapper">
+          <canvas id= 'myChart' class="canvas chart-area"></canvas>
+      </div>
+    </div>
+
+
+  
+  </div>              
     <div class="row justify-content-md-center pt-3">
         <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form bg-light p-4 home-form border border-info border-2 rounded-3 shadow">
-
             <form method='POST' action='/selectteam' class="needs-validation" novalidate>
                 <div class="mb-3">
                   <label for="leagueID" class="form-label">Team ID 
@@ -91,31 +102,93 @@ Array.prototype.slice.call(forms)
 <script>
 let datajs = JSON.parse({{data | tojson}});
 let labels =  datajs[0]['gw'];
-let datasetValue = [];
-for(let i = 0; i < datajs.length; i++){
-  let randomColorNumber = Math.floor(Math.random()*16777215).toString(16);
-	let val = {
-          label: datajs[i]['name'],
-          data: datajs[i]['total_points'],
-          fill: false,
-          borderColor: '#' + randomColorNumber,
-          tension: 0.1
-		}
-	
-	datasetValue.push(val);
-};
-
+let colors = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
+function createLineDataset(dataName){
+  let datasetValue = [];
+  for(let i = 0; i < datajs.length; i++){
+    
+    let val = {
+        label: datajs[i]['name'],
+        data: datajs[i][dataName],
+        fill: false,
+        borderColor: colors[i],
+        tension: 0.1
+    }
+    
+    datasetValue.push(val);
+  };
+  return datasetValue
+}
 const data = {
   labels: labels,
-  datasets: datasetValue
+  datasets: createLineDataset('total_points')
 }
 
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'line',
     data: data,
+    options: {
+      scales: {
+            y: {
+              title:{
+                display: true,
+                text: 'y'
+                }
+            },
+            x: {
+              title:{
+                display: true,
+                text: 'x'
+                }
+            },
+      },
+      plugins: {
+        legend:{
+          position: 'left',
+        },
+        title: {
+                display: true,
+                font: {style: 'bold'},
+                text: 'Custom Chart Title',
+                padding: {
+                    top: 10,
+                    bottom: 30
+                }
+            }
+      }
+    }
     
 });
+
+const data2 = {
+  labels: labels,
+  datasets: createLineDataset('total_bench_points')
+}
+var ctx = document.getElementById('bench_points').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: data2,
+    options: {
+      scales: {
+            y: {
+              title:{
+                display: true,
+                text: 'y'
+                }
+            },
+            x: {
+              title:{
+                display: true,
+                text: 'x'
+                }
+            },
+
+        }
+    }
+    
+});
+
 </script>
 
 {% endblock %}
