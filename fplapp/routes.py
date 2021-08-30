@@ -84,10 +84,11 @@ def home():
     
     data = []
     for j in temp:
-        t = {'name': j['name'], 'gw': [0], 'total_points': [0], 'gw_bench_points': [0], 'total_bench_points': [0], 
+        t = {'name': j['name'], 'gw': [0], 'gw_points':[0],'total_points': [0], 'gw_bench_points': [0], 'total_bench_points': [0], 
             'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 'total_transfers': [0],'team_value': [0]}
         for i in j['player_history']:
             t['gw'].append(int(i['gw']))
+            t['gw_points'].append(int(i['gw_points']))
             t['total_points'].append(int(i['total_points']))
             t['gw_bench_points'].append(int(i['gw_bench_points']))
             t['total_bench_points'].append(sum(t['total_bench_points']) + i['gw_bench_points'])
