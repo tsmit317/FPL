@@ -9,12 +9,12 @@ def home():
     data = fpl.create_fpl_list(982237)
     return render_template('home.html', data = json.dumps(data))
 
+
 @app.route('/selectteam', methods=['GET', 'POST'])
 def selectteam():
     if request.method == 'POST':
         
         request_user_ID = request.form["userID"] 
-        
         league_info =  fpl.get_user_leagues_info(request_user_ID)
         if league_info == False:
             flash('Oh no something went wrong. Please try again!', 'danger')
@@ -22,11 +22,11 @@ def selectteam():
         else:
             return render_template('selectteam.html', league_info = league_info) 
 
+
+# Currently not being used 
 @app.route('/check-data', methods=['GET', 'POST'])
 def process_data():
     if request.method == 'POST':
-        
-        
         rank = int(request.form['select_league'])
         response = ''
         if rank == 1:
