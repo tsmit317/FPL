@@ -4,7 +4,6 @@
 {% endblock head%}
 
 {% block body %}
-
 <div class="flash_container">
   {% with messages = get_flashed_messages(with_categories = true) %}
     {% if messages %}
@@ -24,35 +23,40 @@
       <h1 class="display-1">FPL Dashboard</h1>
     </div>
     
-    
     <div class="main_wrapper">
-      <!--Canvas 1-->
-      
       <div class="canvas_wrapper">
           <canvas id='myChart1'class="canvas chart-area"></canvas>
           <select class = "selectData1" id ='selectData1'>
             <option value = "total_bench_points">Total Bench Points</option>
             <option value = "total_points">Total Points</option>
             <option value = "team_value">Team Value</option>
-            <option value = "total_transfers">Total Transfers</option>
-          </select>
-
-          
+          </select> 
       </div>
-      <!--Canvas 2-->
-      
       <div class="canvas_wrapper pb-3">
           <canvas id= 'myChart2' class="canvas chart-area"></canvas>
           <select class = "selectData2" id ='selectData2'>
             <option value = "gw_points">Game Week Points</option>
             <option value = "gw_bench_points">Game Week Bench Points</option>
+          </select>
+      </div>
+    </div>
+    <div class="main_wrapper">
+      <div class="canvas_wrapper">
+          <canvas id='myChart3'class="canvas chart-area"></canvas>
+          <select class = "selectData3" id ='selectData3'>
+            <option value = "total_transfer_cost">Total Transfer Hit Points</option>
+            <option value = "total_transfers">Total Transfers</option>
+          </select> 
+      </div>
+      <div class="canvas_wrapper pb-3">
+          <canvas id= 'myChart4' class="canvas chart-area"></canvas>
+          <select class = "selectData4" id ='selectData4'>
+            <option value = "gw_transfer_cost">Game Week Transfer Hits</option>
             <option value = "gw_transfers">Game Week Transfers</option>
           </select>
       </div>
     </div>
 
-
-  
   </div>              
     <div class="row justify-content-md-center pt-3">
         <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto form bg-light p-4 home-form border border-info border-2 rounded-3 shadow">
@@ -91,7 +95,6 @@
           </div>
         </div>
     </div>
-    
 </div>
 
 
@@ -121,7 +124,6 @@ let colors = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', 
 function createLineDataset(dataName){
   let datasetValue = [];
   for(let i = 0; i < datajs.length; i++){
-    
     let val = {
         label: datajs[i]['name'],
         data: datajs[i][dataName],
@@ -129,15 +131,29 @@ function createLineDataset(dataName){
         borderColor: colors[i],
         tension: 0.1
     }
-    
     datasetValue.push(val);
   };
   return datasetValue
 }
 
 
-var ctx = document.getElementById('myChart1').getContext('2d');
+const selectElement1 = document.getElementById('selectData1');
+const selectElement2 = document.getElementById('selectData2');
+const selectElement3 = document.getElementById('selectData3');
+const selectElement4 = document.getElementById('selectData4');
 
+function changeChart(data_string, title, chart){
+  dataChange = {
+      labels: labels,
+      datasets: createLineDataset(data_string)
+  }
+  chart.data = dataChange;
+  chart.options.scales.y.title.text = title.split(" ").splice(-1);
+  chart.options.plugins.title.text = title;
+  chart.update();
+}
+
+var ctx = document.getElementById('myChart1').getContext('2d');
 var myChart1 = new Chart(ctx, {
     type: 'line',
     data: {
@@ -146,18 +162,18 @@ var myChart1 = new Chart(ctx, {
     },
     options: {
       scales: {
-            y: {
-              title:{
-                display: true,
-                text: 'Points'
-                }
-            },
-            x: {
-              title:{
-                display: true,
-                text: 'Game Week'
-                }
-            },
+        y: {
+          title:{
+            display: true,
+            text: 'Points'
+            }
+        },
+        x: {
+          title:{
+            display: true,
+            text: 'Game Week'
+            }
+        },
       },
       plugins: {
         legend:{
@@ -172,38 +188,13 @@ var myChart1 = new Chart(ctx, {
                     top: 10,
                     bottom: 30
                 }
-            }
+        }
       }
-    }
-    
+    } 
 });
 
-
-const selectElement1 = document.getElementById('selectData1');
-const selectElement2 = document.getElementById('selectData2');
-
-function changeChart(data_string, title, chart){
-  dataChange = {
-      labels: labels,
-      datasets: createLineDataset(data_string)
-  }
-  chart.data = dataChange;
-  chart.options.scales.y.title.text = title.split(" ").splice(-1);
-  chart.options.plugins.title.text = title;
-  chart.update();
-}
-
-selectElement1.addEventListener('change', (event) => {
-  changeChart(selectElement1.value, String(selectElement1.options[selectElement1.selectedIndex].text), myChart1);
-});
-selectElement2.addEventListener('change', (event) => {
-  changeChart(selectElement2.value, String(selectElement2.options[selectElement2.selectedIndex].text), myChart2);
-});
-
-
-
-var ctx = document.getElementById('myChart2').getContext('2d');
-var myChart2 = new Chart(ctx, {
+var ctx2 = document.getElementById('myChart2').getContext('2d');
+var myChart2 = new Chart(ctx2, {
     type: 'line',
     data: {
       labels: labels,
@@ -211,39 +202,133 @@ var myChart2 = new Chart(ctx, {
     },
     options: {
       scales: {
-            y: {
-              title:{
-                display: true,
-                text: 'Points'
-                }
-            },
-            x: {
-              title:{
-                display: true,
-                text: 'Game Week'
-                }
-            },
+        y: {
+          title:{
+            display: true,
+            text: 'Points'
+            }
+        },
+        x: {
+          title:{
+            display: true,
+            text: 'Game Week'
+            }
+        },
       },
-      
+      plugins: {
+        legend:{
+          position: 'left',
+        },
+        title: {
+          display: true,
+          color: '#000000',
+
+          font: {size: 18},
+          text: 'Game Week Points',
+          padding: {
+              top: 10,
+              bottom: 30
+          }
+        }
+      }
+    }
+  
+    
+});
+
+var ctx3 = document.getElementById('myChart3').getContext('2d');
+var myChart3 = new Chart(ctx3, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: createLineDataset('total_transfer_cost')
+    },
+    options: {
+      scales: {
+        y: {
+          title:{
+            display: true,
+            text: 'Points'
+            }
+        },
+        x: {
+          title:{
+            display: true,
+            text: 'Game Week'
+            }
+        },
+      },
       plugins: {
         legend:{
           position: 'left',
         },
         title: {
                 display: true,
-                color: '#000000',
-
+                align: 'center',
                 font: {size: 18},
-                text: 'Game Week Points',
+                text: 'Total Transfer Hit Points',
                 padding: {
                     top: 10,
                     bottom: 30
                 }
-            }
+        }
       }
-    }
-  
-    
+    } 
+});
+
+var ctx4 = document.getElementById('myChart4').getContext('2d');
+var myChart4 = new Chart(ctx4, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: createLineDataset('gw_transfer_cost')
+    },
+    options: {
+      scales: {
+        y: {
+          title:{
+            display: true,
+            text: 'Points'
+            }
+        },
+        x: {
+          title:{
+            display: true,
+            text: 'Game Week'
+            }
+        },
+      },
+      plugins: {
+        legend:{
+          position: 'left',
+        },
+        title: {
+                display: true,
+                align: 'center',
+                font: {size: 18},
+                text: 'Total Points',
+                padding: {
+                    top: 10,
+                    bottom: 30
+                }
+        }
+      }
+    } 
+});
+
+
+selectElement1.addEventListener('change', (event) => {
+  changeChart(selectElement1.value, String(selectElement1.options[selectElement1.selectedIndex].text), myChart1);
+});
+selectElement2.addEventListener('change', (event) => {
+  changeChart(selectElement2.value, String(selectElement2.options[selectElement2.selectedIndex].text), myChart2);
+});
+selectElement3.addEventListener('change', (event) => {
+  changeChart(selectElement3.value, String(selectElement3.options[selectElement2.selectedIndex].text), myChart3);
+});
+
+selectElement4.addEventListener('change', (event) => {
+  changeChart(selectElement4.value, String(selectElement4.options[selectElement4.selectedIndex].text), myChart4);
 });
 
 </script>
