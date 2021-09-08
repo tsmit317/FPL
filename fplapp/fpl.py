@@ -10,7 +10,6 @@ if req.status_code != 404:
     league = json.loads(req.text)
 
 
-# TODO Remove the temp dict and just append a dict straight to the list
 def get_league_users(league_id):
     url = "https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/".format(league_id=league_id)
     req = requests.get(url)
@@ -19,16 +18,8 @@ def get_league_users(league_id):
 
     league_players = []
     for person in league['standings']['results']:
-        temp = {}
-        temp['name'] = person['player_name']
-        temp['team_id'] = person['entry']
-        temp['team_name'] = person['entry_name']
-        league_players.append(temp)
+        league_players.append({'name': person['player_name'], 'team_id': person['entry'], 'team_name': person['entry_name']})
     return league_players
-
-
-
-
 
 
 def get_user_player_list(user_id):
@@ -45,15 +36,32 @@ def get_user_history(user_id):
     if req.status_code != 404:
         history = json.loads(req.text)
 
-    temp = []
+    temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
+        'total_bench_points': [0], 'bank': [100], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
+        'total_transfers': [0],'team_value': [100.0]}
     for i in history['current']:
-        temp.append(
-            {'gw': i['event'], 'gw_points': i['points'], 'total_points': i['total_points'], 'rank':i['rank'], 'rank_sort': i['rank_sort'], 
-            'overall_rank': i['overall_rank'], 'bank': float(i['bank'])/10, 'team_value': float(i['value'])/10, 'gw_transfers': i['event_transfers'], 
-            'gw_transfer_cost': i['event_transfers_cost'], 'gw_bench_points': i['points_on_bench']
-            }
-        )
+        temp['gw'].append(int(i['event']))
+        temp['gw_points'].append(int(i['points']))
+        temp['total_points'].append(int(i['total_points']))
+        temp['rank'].append(int(i['rank']))
+        temp['rank_sort'].append(int(i['rank_sort']))
+        temp['overall_rank'].append(int(i['overall_rank']))
+        temp['bank'].append(float(i['bank'])/10)
+        temp['gw_bench_points'].append(int(i['points_on_bench']))
+        temp['total_bench_points'].append(sum(temp['total_bench_points']) + i['points_on_bench'])
+        temp['gw_transfer_cost'].append(i['event_transfers_cost'])
+        temp['total_transfer_cost'].append(sum(temp['total_transfer_cost']) + i['event_transfers_cost']) 
+        temp['gw_transfers'].append(int(i['event_transfers']))
+        temp['total_transfers'].append(sum(temp['gw_transfers']) + i['event_transfers'])
+        temp['team_value'].append(float(i['value'])/10)
+        
     return temp
+
+def create_fpl_list(league_id):
+    league_members = get_league_users(league_id)
+    for member in league_members:
+        member.update(get_user_history(member['team_id']))
+    return league_members
 
 def get_user_player_info(user_player_list):
     temp = []
@@ -61,35 +69,6 @@ def get_user_player_info(user_player_list):
         if i['id'] in user_player_list:
             temp.append(i)
     return temp
-
-
-
-
-
-def create_fpl_list(league_id):
-    lp = get_league_users(league_id)
-    for i in lp:
-    # i['player_list'] = get_user_player_info(get_user_player_list(i['team_id']))
-        i['player_history'] = get_user_history(i['team_id'])
-        
-    data = []
-    for j in lp:
-        t = {'name': j['team_name'], 'gw': [0], 'gw_points':[0],'total_points': [0], 'gw_bench_points': [0], 'total_bench_points': [0], 
-                'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 'total_transfers': [0],'team_value': [100.0]}
-        for i in j['player_history']:
-            t['gw'].append(int(i['gw']))
-            t['gw_points'].append(int(i['gw_points']))
-            t['total_points'].append(int(i['total_points']))
-            t['gw_bench_points'].append(int(i['gw_bench_points']))
-            t['total_bench_points'].append(sum(t['total_bench_points']) + i['gw_bench_points'])
-            t['gw_transfer_cost'].append(i['gw_transfer_cost'])
-            t['total_transfer_cost'].append(sum(t['total_transfer_cost']) + i['gw_transfer_cost']) 
-            t['gw_transfers'].append(int(i['gw_transfers']))
-            t['total_transfers'].append(sum(t['gw_transfers']) + i['gw_transfers'])
-            t['team_value'].append(float(i['team_value']))
-            
-        data.append(t)
-    return data
 
 
 def get_player_data(user_id):
@@ -101,7 +80,3 @@ def get_player_data(user_id):
     for i in league['elements']:
         if i['id'] == 14:
             print(i)
-
-# df['game_week'] = 1
-# df.to_csv('fpl_data_2021.csv')
-# print(df)
