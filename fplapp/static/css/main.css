@@ -26,7 +26,13 @@ body{
 .canvas{
     width: 100%;
     height: auto;
-    
-   
     /* background-color: #22293d; */
 }
+
+.navbar-header {
+    float: left;
+    padding: 15px;
+    text-align: center;
+    width: 100%;
+}
+.navbar-brand {float:none;}
