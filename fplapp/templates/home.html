@@ -21,26 +21,73 @@
   <div class="row justify-content-lg-center pt-3">
 
     <!--League Position Table-->
-    <div class="container">
-      <table class="table table-striped table-dark table-hover w-auto">
-        <thead>
-          <tr>
-            <th scope="col">Pos</th>
-            <th scope="col">Team</th>
-            <th scope="col">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for member in league_info %}
+    <div class="row">
+      <div class="container col-md-4">
+        <table class="table table-striped table-dark table-hover w-auto">
+          <thead>
             <tr>
-                <td>{{loop.index}}</td>
-                <td>{{member.team_name}}</td>
-                <td>{{member.total_points[-1]}}</td> 
+              <th scope="col">Pos</th>
+              <th scope="col">Team</th>
+              <th scope="col">Score</th>
             </tr>
-            {% endfor %} 
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+              {% for member in league_info %}
+              <tr>
+                  <td>{{loop.index}}</td>
+                  <td>{{member.team_name}}</td>
+                  <td>{{member.total_points[-1]}}</td> 
+                  
+              </tr>
+              {% endfor %} 
+          </tbody>
+        </table>
+      </div>
+      <div class="container col-md-4">
+        <table class="table table-striped table-dark table-hover w-auto">
+          <thead>
+            <tr>
+              <th scope="col">Team</th>
+              <th scope="col">Chip</th>
+              <th scope="col">Game Week</th>
+            </tr>
+          </thead>
+          <tbody>
+              {% for member in league_info %}
+                {% if member.chips %}
+                  {%for chip in member.chips%}
+                    <tr>
+                      <td>{{member.team_name}}</td>
+                      <td>{{chip.name}}</td>
+                      <td>{{chip.gw_used}}</td> 
+                    </tr>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %} 
+          </tbody>
+        </table>
+      </div>
+      <div class="container col-md-4">
+        <table class="table table-striped table-dark table-hover w-auto">
+          <thead>
+            <tr>
+              <th scope="col">Team</th>
+              <th scope="col">Past Seasons</th>
+            </tr>
+          </thead>
+          <tbody>
+              {% for member in league_info %}
+                
+                    <tr>
+                      <td>{{member.team_name}}</td>
+                      <td>{{member['past_seasons']|length}}</td>
+                    </tr>
+              {% endfor %} 
+          </tbody>
+        </table>
+      </div>
     </div>
+    
     
     <!--Charts-->
     <div class="main_wrapper">
@@ -117,6 +164,12 @@
     </div>
 </div>
 
+
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
 
 <script>
   var forms = document.querySelectorAll('.needs-validation');
@@ -200,6 +253,7 @@ var myChart1 = new Chart(ctx, {
           position: 'left',
           
         },
+        
         title: {
                 display: true,
                 align: 'center',
