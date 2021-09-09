@@ -52,7 +52,7 @@ def get_user_history(user_id):
         temp['gw_transfer_cost'].append(i['event_transfers_cost'])
         temp['total_transfer_cost'].append(sum(temp['total_transfer_cost']) + i['event_transfers_cost']) 
         temp['gw_transfers'].append(int(i['event_transfers']))
-        temp['total_transfers'].append(sum(temp['gw_transfers']) + i['event_transfers'])
+        temp['total_transfers'].append(sum(temp['total_transfers']) + i['event_transfers'])
         temp['team_value'].append(float(i['value'])/10)
     for i in history['past']:
         temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
