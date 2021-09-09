@@ -38,7 +38,7 @@ def get_user_history(user_id):
 
     temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
         'total_bench_points': [0], 'bank': [100], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
-        'total_transfers': [0],'team_value': [100.0]}
+        'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': []}
     for i in history['current']:
         temp['gw'].append(int(i['event']))
         temp['gw_points'].append(int(i['points']))
@@ -54,7 +54,10 @@ def get_user_history(user_id):
         temp['gw_transfers'].append(int(i['event_transfers']))
         temp['total_transfers'].append(sum(temp['gw_transfers']) + i['event_transfers'])
         temp['team_value'].append(float(i['value'])/10)
-        
+    for i in history['past']:
+        temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
+    for i in history['chips']:
+        temp['chips'].append({'name': i['name'], 'gw_used': i['event']})
     return temp
 
 def create_fpl_list(league_id):
