@@ -17,9 +17,10 @@
   {% endwith %}
 </div>
 
-<div class="container">
-  <div class="row justify-content-md-center pt-3">
+<div class="container-fluid">
+  <div class="row justify-content-lg-center pt-3">
 
+    <!--League Position Table-->
     <div class="container">
       <table class="table table-striped table-dark table-hover w-auto">
         <thead>
@@ -30,7 +31,6 @@
           </tr>
         </thead>
         <tbody>
-          
             {% for member in league_info %}
             <tr>
                 <td>{{loop.index}}</td>
@@ -38,13 +38,11 @@
                 <td>{{member.total_points[-1]}}</td> 
             </tr>
             {% endfor %} 
-            
-          
-          
         </tbody>
       </table>
     </div>
     
+    <!--Charts-->
     <div class="main_wrapper">
       <div class="canvas_wrapper pb-3">
           <canvas id='myChart1'class="canvas chart-area"></canvas>
@@ -200,10 +198,7 @@ var myChart1 = new Chart(ctx, {
       plugins: {
         legend:{
           position: 'left',
-          labels: {
-            
-            boxWidth: 30
-          }
+          
         },
         title: {
                 display: true,
