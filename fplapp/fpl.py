@@ -57,7 +57,8 @@ def get_user_history(user_id):
     for i in history['past']:
         temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
     for i in history['chips']:
-        temp['chips'].append({'name': i['name'], 'gw_used': i['event']})
+        chip_names = {'wildcard': 'Wildcard', '3xc': "Triple Captain"}
+        temp['chips'].append({'name': chip_names[i['name']], 'gw_used': i['event']})
     return temp
 
 def create_fpl_list(league_id):
