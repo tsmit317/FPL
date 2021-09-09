@@ -22,9 +22,34 @@
     <div class="col text-center">
       <h1 class="display-1">FPL Dashboard</h1>
     </div>
+
+    <div class="container">
+      <table class="table table-striped table-dark table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Pos</th>
+            <th scope="col">Team</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            {% for member in league_info %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{member.team_name}}</td>
+                <td>{{member.total_points[-1]}}</td> 
+            </tr>
+            {% endfor %} 
+            
+          
+          
+        </tbody>
+      </table>
+    </div>
     
     <div class="main_wrapper">
-      <div class="canvas_wrapper">
+      <div class="canvas_wrapper pb-3">
           <canvas id='myChart1'class="canvas chart-area"></canvas>
           <select class = "selectData1" id ='selectData1'>
             <option value = "total_points" selected>Total Points</option>
@@ -41,7 +66,7 @@
       </div>
     </div>
     <div class="main_wrapper">
-      <div class="canvas_wrapper">
+      <div class="canvas_wrapper pb-3">
           <canvas id='myChart3'class="canvas chart-area"></canvas>
           <select class = "selectData3" id ='selectData3'>
             <option value = "total_transfer_cost" selected>Total Transfer Hit Points</option>
@@ -125,7 +150,7 @@ function createLineDataset(dataName){
   let datasetValue = [];
   for(let i = 0; i < datajs.length; i++){
     let val = {
-        label: datajs[i]['name'],
+        label: datajs[i]['team_name'],
         data: datajs[i][dataName],
         fill: false,
         borderColor: colors[i],
@@ -161,6 +186,7 @@ var myChart1 = new Chart(ctx, {
       datasets: createLineDataset('total_points')
     },
     options: {
+      
       scales: {
         y: {
           title:{
@@ -178,6 +204,7 @@ var myChart1 = new Chart(ctx, {
       plugins: {
         legend:{
           position: 'left',
+          
         },
         title: {
                 display: true,

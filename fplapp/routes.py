@@ -7,7 +7,7 @@ import json
 @app.route('/', methods=['GET','POST'])
 def home():
     data = fpl.create_fpl_list(982237)
-    return render_template('home.html', data = json.dumps(data))
+    return render_template('home.html', data = json.dumps(data), league_info= data)
 
 
 @app.route('/selectteam', methods=['GET', 'POST'])
@@ -16,6 +16,8 @@ def selectteam():
         
         request_user_ID = request.form["userID"] 
         league_info =  fpl.get_user_leagues_info(request_user_ID)
+        
+        
         if league_info == False:
             flash('Oh no something went wrong. Please try again!', 'danger')
             return redirect(url_for('home'))
