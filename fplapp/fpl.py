@@ -3,19 +3,45 @@ import pandas as pd
 import requests
 import pprint
 
+def request_error_check(url):
+    try:
+        req = requests.get(url)
+        req.raise_for_status()
+    except requests.exceptions.HTTPError as errh:
+        return ("Http Error:",errh)
+    except requests.exceptions.ConnectionError as errc:
+        return ("Error Connecting:",errc)
+    except requests.exceptions.Timeout as errt:
+        return ("Timeout Error:",errt)
+    except requests.exceptions.RequestException as err:
+        return ("OOps: Something Else",err)
+    
+    return json.loads(req.text)
 
-regUrl = 'https://fantasy.premierleague.com/api/bootstrap-static/'
-req = requests.get(regUrl)
-if req.status_code != 404:
-    league = json.loads(req.text)
+def get_base_url():
+    regUrl = 'https://fantasy.premierleague.com/api/bootstrap-static/'
+    req = requests.get(regUrl)
+    if req.status_code != 404:
+        league = json.loads(req.text)
+    return league
 
 
 def get_league_users(league_id):
     url = "https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/".format(league_id=league_id)
-    req = requests.get(url)
-    if req.status_code != 404:
-        league = json.loads(req.text)
-
+    try:
+        req = requests.get(url)
+        req.raise_for_status()
+    except requests.exceptions.HTTPError as errh:
+        return ("Http Error:",errh)
+    except requests.exceptions.ConnectionError as errc:
+        return ("Error Connecting:",errc)
+    except requests.exceptions.Timeout as errt:
+        return ("Timeout Error:",errt)
+    except requests.exceptions.RequestException as err:
+        return ("OOps: Something Else",err)
+    
+    league = json.loads(req.text)
+    
     league_players = []
     for person in league['standings']['results']:
         league_players.append({'name': person['player_name'], 'team_id': person['entry'], 'team_name': person['entry_name']})
@@ -37,7 +63,7 @@ def get_user_history(user_id):
         history = json.loads(req.text)
 
     temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
-        'total_bench_points': [0], 'bank': [100], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
+        'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
         'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': []}
     for i in history['current']:
         temp['gw'].append(int(i['event']))
