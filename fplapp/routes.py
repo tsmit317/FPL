@@ -7,7 +7,11 @@ import json
 @app.route('/', methods=['GET','POST'])
 def home():
     data = fpl.create_fpl_list(982237)
-    return render_template('home.html', data = json.dumps(data), league_info= data)
+    print(type(data))
+    if type(data) is list:
+        return render_template('home.html', data = json.dumps(data), league_info= data)
+    else:
+        return render_template('errorpage.html', error_message = data)
 
 
 @app.route('/selectteam', methods=['GET', 'POST'])
