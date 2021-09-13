@@ -8,13 +8,13 @@ def request_error_check(url):
         req = requests.get(url)
         req.raise_for_status()
     except requests.exceptions.HTTPError as errh:
-        return ("Http Error:",errh)
+        return (f"Http Error: {errh}")
     except requests.exceptions.ConnectionError as errc:
-        return ("Error Connecting:",errc)
+        return (f"Error Connecting: {errc}")
     except requests.exceptions.Timeout as errt:
-        return ("Timeout Error:",errt)
+        return (f"Timeout Error: {errt}")
     except requests.exceptions.RequestException as err:
-        return ("OOps: Something Else",err)
+        return (f"Uh Oh: Something Else {err}")
     
     return json.loads(req.text)
 
@@ -28,24 +28,16 @@ def get_base_url():
 
 def get_league_users(league_id):
     url = "https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/".format(league_id=league_id)
-    try:
-        req = requests.get(url)
-        req.raise_for_status()
-    except requests.exceptions.HTTPError as errh:
-        return ("Http Error:",errh)
-    except requests.exceptions.ConnectionError as errc:
-        return ("Error Connecting:",errc)
-    except requests.exceptions.Timeout as errt:
-        return ("Timeout Error:",errt)
-    except requests.exceptions.RequestException as err:
-        return ("OOps: Something Else",err)
     
-    league = json.loads(req.text)
     
-    league_players = []
-    for person in league['standings']['results']:
-        league_players.append({'name': person['player_name'], 'team_id': person['entry'], 'team_name': person['entry_name']})
-    return league_players
+    league = request_error_check(url)
+    if type(league) is str:
+        return league
+    else:
+        league_players = []
+        for person in league['standings']['results']:
+            league_players.append({'name': person['player_name'], 'team_id': person['entry'], 'team_name': person['entry_name']})
+        return league_players
 
 
 def get_user_player_list(user_id):
@@ -64,7 +56,7 @@ def get_user_history(user_id):
 
     temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
         'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
-        'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': []}
+        'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': [], 'total_value': [100.0]}
     for i in history['current']:
         temp['gw'].append(int(i['event']))
         temp['gw_points'].append(int(i['points']))
@@ -79,7 +71,8 @@ def get_user_history(user_id):
         temp['total_transfer_cost'].append(sum(temp['total_transfer_cost']) + i['event_transfers_cost']) 
         temp['gw_transfers'].append(int(i['event_transfers']))
         temp['total_transfers'].append(sum(temp['total_transfers']) + i['event_transfers'])
-        temp['team_value'].append(float(i['value'])/10)
+        temp['total_value'].append(float(i['value'])/10)
+        temp['team_value'].append(float("{0:.2f}".format(temp['total_value'][-1] - temp['bank'][-1])))
     for i in history['past']:
         temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
     for i in history['chips']:
@@ -89,9 +82,12 @@ def get_user_history(user_id):
 
 def create_fpl_list(league_id):
     league_members = get_league_users(league_id)
-    for member in league_members:
-        member.update(get_user_history(member['team_id']))
-    return league_members
+    if type(league_members) is str:
+        return league_members
+    else:
+        for member in league_members:
+            member.update(get_user_history(member['team_id']))
+        return league_members
 
 def get_user_player_info(user_player_list):
     temp = []
