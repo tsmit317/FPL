@@ -23,7 +23,7 @@
 
     <!--League Position Table-->
     <div class="row">
-      <div class="container col-md-4">
+      <div class="container col-md-3">
       <!--League Table-->
         <table class="table table-striped table-dark table-hover w-auto">
           <thead>
@@ -45,7 +45,7 @@
           </tbody>
         </table>
       </div>
-      <div class="container col-md-4">
+      <div class="container col-md-3">
       <!--Wildcard Table-->
         <table class="table table-striped table-dark table-hover w-auto">
           <thead>
@@ -70,7 +70,34 @@
           </tbody>
         </table>
       </div>
-      <div class="container col-md-4">
+      <div class="container col-md-3">
+      <!--Bank Table-->
+        <table class="table table-striped table-dark table-hover w-auto">
+          <thead>
+            <tr>
+              <th scope="col">Team</th>
+              <th scope="col">Total Value</th>
+              <th scope="col">Team Value</th>
+              <th scope="col">Bank</th>
+            </tr>
+          </thead>
+          <tbody>
+              
+
+              {% for member in league_info %}
+                    <tr>
+                      <td>{{member.team_name}}</td>
+                      <td>{{member.total_value[-1]}}</td>
+                      
+                      <td>{{member.team_value[-1]}}</td> 
+                      
+                      <td>{{member.bank[-1]}}</td>
+                    </tr>
+                  {% endfor %} 
+          </tbody>
+        </table>
+      </div>
+      <div class="container col-md-3">
       <!--Past Seasons Table-->
         <table class="table table-striped table-dark table-hover w-auto">
           <thead>
@@ -191,15 +218,27 @@
                     <tr>
                       <th scope="col">Game Week</th>
                       <th scope="col">Points</th>
+                      <th scope="col">Chips</th>
                     </tr>
                   </thead>
                   <tbody>
+                  {% set count = [1] %}
                       {% for points in member.gw_points[1::] %}
-                        
                             <tr>
                               <td>{{loop.index}}</td>
                               <td>{{points}}</td>
+                              {% if member['chips']|length < 1 %}
+                              <td>  </td>
+                              {%endif%}
+                              {% for chip in member['chips'] %}
+                                {% if count|length == chip['gw_used'] %}
+                                  <td>{{chip['name']}}</td>
+                                {% else %}
+                                  <td> </td>
+                                {% endif %}
+                              {% endfor %}
                             </tr>
+                        {% set var = count.append(1) %}
                       {% endfor %} 
                   </tbody>
                 </table>
@@ -332,18 +371,27 @@ var myChart1 = new Chart(ctx, {
     options: {
       scales: {
         y: {
+          grid: {
+				lineWidth: 1
+			},
           title:{
             display: true,
             text: 'Points'
             }
         },
         x: {
+          grid: {
+				lineWidth: 1
+			},
           title:{
             display: true,
             text: 'Game Week'
             }
         },
       },
+      point: {
+		backgroundColor: 'white'
+	},
       plugins: {
         legend:{
           position: 'left',
