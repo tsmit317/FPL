@@ -42,9 +42,9 @@
               <tr data-toggle="modal" data-target="#newModal{{member.team_id}}">
                 <td>{{loop.index}}</td>
                 {%if member.rank > member.last_rank %}
-                  <td><span style="color: red">↓</span>{{member.rank - member.last_rank}}</td>
+                  <td><span style="color: red">▼ </span>{{member.rank - member.last_rank}}</td>
                 {% elif member.rank < member.last_rank %}
-                  <td><span style="color: green">↑</span>{{member.last_rank - member.rank}}</td>
+                  <td><span style="color: green">▲ </span>{{member.last_rank - member.rank}}</td>
                 {% else %}
                   <td>-</td>
                 {% endif %}
@@ -57,7 +57,7 @@
           </tbody>
         </table>
       </div>
-      <div class="container col-sm-3">
+      <div class="container col-sm-2">
       <!--Wildcard Table-->
         <table class="table table-striped table-dark table-hover ">
           <thead>
@@ -91,6 +91,7 @@
               <th scope="col">Total Value</th>
               <th scope="col">Team Value</th>
               <th scope="col">Bank</th>
+              <th scope="col">Change</th>
             </tr>
           </thead>
           <tbody>
@@ -100,6 +101,13 @@
                       <td>{{member.total_value[-1]}}</td>
                       <td>{{member.team_value[-1]}}</td> 
                       <td>{{member.bank[-1]}}</td>
+                      {%if member.gw_value_diff[-1] < 0 %}
+                        <td><span style="color: red">▼ </span>{{"%.2f"|format(member.gw_value_diff[-1])}}</td>
+                      {% elif member.gw_value_diff[-1] > 0 %}
+                        <td><span style="color: green">▲ </span>{{"%.2f"|format(member.gw_value_diff[-1])}}</td>
+                      {% else %}
+                        <td> - </td>
+                      {% endif %}
                     </tr>
                   {% endfor %} 
           </tbody>
@@ -334,6 +342,7 @@
                       <th scope="col">Total Value</th>
                       <th scope="col">Team Value</th>
                       <th scope="col">Bank</th>
+                      <th scope="col">GW Diff</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -343,6 +352,15 @@
                               <td>{{member.total_value[i]}}</td>
                               <td>{{member.team_value[i]}}</td>
                               <td>{{member.bank[i]}}</td>
+
+                              {%if member.gw_value_diff[i] < 0 %}
+                                <td><span style="color: red">▼ </span>{{"%.2f"|format(member.gw_value_diff[i])}}</td>
+                              {% elif member.gw_value_diff[i] > 0 %}
+                                <td><span style="color: green">▲ </span>{{"%.2f"|format(member.gw_value_diff[i])}}</td>
+                              {% else %}
+                                <td> - </td>
+                              {% endif %}
+                              
                             </tr>
                       {% endfor %} 
                   </tbody>
