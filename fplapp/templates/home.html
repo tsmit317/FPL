@@ -42,9 +42,9 @@
               <tr data-toggle="modal" data-target="#newModal{{member.team_id}}">
                 <td>{{loop.index}}</td>
                 {%if member.rank > member.last_rank %}
-                  <td>↓{{member.rank - member.last_rank}}</td>
+                  <td><span style="color: red">↓</span>{{member.rank - member.last_rank}}</td>
                 {% elif member.rank < member.last_rank %}
-                  <td>↑{{member.last_rank - member.rank}}</td>
+                  <td><span style="color: green">↑</span>{{member.last_rank - member.rank}}</td>
                 {% else %}
                   <td>-</td>
                 {% endif %}
