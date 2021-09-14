@@ -4,10 +4,12 @@ from fplapp import app
 from fplapp import fpl
 import json
 
+
+
 @app.route('/', methods=['GET','POST'])
 def home():
+    
     data = fpl.create_fpl_list(982237)
-    print(type(data))
     if type(data) is list:
         return render_template('home.html', data = json.dumps(data), league_info= data)
     else:
