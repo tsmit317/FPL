@@ -12,7 +12,7 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTNIG = False
     SESSION_COOKIE = True
-   
+    
 class DevelopmentConfig(Config):
     DEBUG = True
     SESSION_COOKIE = False
