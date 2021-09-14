@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import requests
 import pprint
+import time
 
 def request_error_check(url):
     try:
@@ -36,7 +37,7 @@ def get_league_users(league_id):
     else:
         league_players = []
         for person in league['standings']['results']:
-            league_players.append({'name': person['player_name'], 'team_id': person['entry'], 'team_name': person['entry_name']})
+            league_players.append({'name': person['player_name'], 'team_id': person['entry'], 'team_name': person['entry_name'], 'rank': person['rank'], 'last_rank': person['last_rank']})
         return league_players
 
 
@@ -54,14 +55,14 @@ def get_user_history(user_id):
     if req.status_code != 404:
         history = json.loads(req.text)
 
-    temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
+    temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'all_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
         'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
         'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': [], 'total_value': [100.0]}
     for i in history['current']:
         temp['gw'].append(int(i['event']))
         temp['gw_points'].append(int(i['points']))
         temp['total_points'].append(int(i['total_points']))
-        temp['rank'].append(int(i['rank']))
+        temp['all_rank'].append(int(i['rank']))
         temp['rank_sort'].append(int(i['rank_sort']))
         temp['overall_rank'].append(int(i['overall_rank']))
         temp['bank'].append(float(i['bank'])/10)
@@ -81,12 +82,18 @@ def get_user_history(user_id):
     return temp
 
 def create_fpl_list(league_id):
+    firsttime = time.time()
     league_members = get_league_users(league_id)
+    endfirst = time.time()
+    print(f"First: {endfirst - firsttime}")
     if type(league_members) is str:
         return league_members
     else:
+        sectime = time.time()
         for member in league_members:
             member.update(get_user_history(member['team_id']))
+        endsec = time.time()
+        print(f"Sec: {endsec-sectime}")
         return league_members
 
 def get_user_player_info(user_player_list):
