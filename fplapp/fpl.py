@@ -57,7 +57,7 @@ def get_user_history(user_id):
 
     temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'all_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
         'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
-        'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': [], 'total_value': [100.0]}
+        'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': [], 'total_value': [100.0], 'gw_value_diff':[0]}
     for i in history['current']:
         temp['gw'].append(int(i['event']))
         temp['gw_points'].append(int(i['points']))
@@ -79,6 +79,9 @@ def get_user_history(user_id):
     for i in history['chips']:
         chip_names = {'wildcard': 'Wildcard', '3xc': "Triple Captain"}
         temp['chips'].append({'name': chip_names[i['name']], 'gw_used': i['event']})
+    for i in range(len(temp['total_value'])):
+        if i > 0:
+            temp['gw_value_diff'].append(temp['total_value'][i] - temp['total_value'][i-1])
     return temp
 
 def create_fpl_list(league_id):
