@@ -10,8 +10,9 @@ import json
 def home():
     
     data = fpl.create_fpl_list(982237)
-    if type(data) is list:
-        return render_template('home.html', data = json.dumps(data), league_info= data)
+    print(data[1])
+    if type(data[0]) is list:
+        return render_template('home.html', data = json.dumps(data[0]), league_info= data[0], chip_dict=data[1])
     else:
         return render_template('errorpage.html', error_message = data)
 
