@@ -55,14 +55,14 @@ def get_user_history(user_id):
     if req.status_code != 404:
         history = json.loads(req.text)
 
-    temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'all_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
+    temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'gw_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
         'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
         'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': [], 'total_value': [100.0], 'gw_value_diff':[0]}
     for i in history['current']:
         temp['gw'].append(int(i['event']))
         temp['gw_points'].append(int(i['points']))
         temp['total_points'].append(int(i['total_points']))
-        temp['all_rank'].append(int(i['rank']))
+        temp['gw_rank'].append(int(i['rank']))
         temp['rank_sort'].append(int(i['rank_sort']))
         temp['overall_rank'].append(int(i['overall_rank']))
         temp['bank'].append(float(i['bank'])/10)
@@ -85,6 +85,7 @@ def get_user_history(user_id):
     return temp
 
 def create_fpl_list(league_id):
+    chip_dict = {'Wildcard': 0, 'Triple Captain': 0}
     firsttime = time.time()
     league_members = get_league_users(league_id)
     endfirst = time.time()
@@ -95,9 +96,12 @@ def create_fpl_list(league_id):
         sectime = time.time()
         for member in league_members:
             member.update(get_user_history(member['team_id']))
+            if member['chips']:
+                for i in member['chips']:
+                    chip_dict[i['name']] += 1
         endsec = time.time()
         print(f"Sec: {endsec-sectime}")
-        return league_members
+        return (league_members, chip_dict)
 
 def get_user_player_info(user_player_list):
     temp = []
