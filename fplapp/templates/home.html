@@ -116,13 +116,13 @@
             </tr>
           </thead>
           <tbody>
-              
+              {% for i in most_points_single_gw %}
                 <tr>
-                  <td>{{most_points_single_gw.team_name}}</td>
-                  <td>{{most_points_single_gw.gw}}</td>
-                  <td>{{most_points_single_gw.points}}</td>
+                    <td>{{i.team_name}}</td>
+                    <td>{{i.gw}}</td>
+                    <td>{{i.points}}</td> 
                 </tr>
-              
+              {% endfor %}
           </tbody>
         </table>
       </div>
