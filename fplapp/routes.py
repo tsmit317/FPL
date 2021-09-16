@@ -1,18 +1,18 @@
 from flask import Flask, render_template, url_for, request, flash, redirect
 
 from fplapp import app
-from fplapp import fpl
+from fplapp.fpl_data import FplData
 import json
 
 
 
 @app.route('/', methods=['GET','POST'])
 def home():
-    
-    data = fpl.create_fpl_list(982237)
-    print(data[1])
-    if type(data[0]) is list:
-        return render_template('home.html', data = json.dumps(data[0]), league_info= data[0], chip_dict=data[1])
+    fpl_data = FplData()
+    fpl_data.create_fpl_list(982237)
+    data = fpl_data.get_league_data()
+    if type(data[0]) is dict:
+        return render_template('home.html', data = json.dumps(data), league_info= data, chip_dict=fpl_data.get_league_chips())
     else:
         return render_template('errorpage.html', error_message = data)
 
