@@ -12,7 +12,7 @@ def home():
     fpl_data.create_fpl_list(982237)
     data = fpl_data.get_league_data()
     if type(data[0]) is dict:
-        return render_template('home.html', data = json.dumps(data), league_info= data, chip_dict=fpl_data.get_league_chips())
+        return render_template('home.html', data = json.dumps(data), league_info= data, chip_dict=fpl_data.get_league_chips(), most_points_single_gw = fpl_data.get_most_points_scored_in_a_gw())
     else:
         return render_template('errorpage.html', error_message = data)
 
