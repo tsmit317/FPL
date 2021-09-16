@@ -98,12 +98,19 @@ class FplData():
     #         member['max_gw_points_gw'] = member['gw_points'].index(member['max_gw_points'])
     
     def get_most_points_scored_in_a_gw(self):
-        highest_gw_score = {'team_name': '', 'points': 0, 'gw': 0}
+        highest_gw_score = [{'team_name': '', 'points': 0, 'gw': 0}]
         for member in self.league_data:
-            if max(member['gw_points']) > highest_gw_score['points']:
-                highest_gw_score['team_name'] = member['team_name']
-                highest_gw_score['points'] = max(member['gw_points'])
-                highest_gw_score['gw'] = member['gw_points'].index(highest_gw_score['points'])
+            max_points = max(member['gw_points'])
+            if max_points > highest_gw_score[0]['points']:
+                highest_gw_score.pop()
+                highest_gw_score.append({'team_name': member['team_name'], 'points':  max_points, 'gw': member['gw_points'].index(max_points)})
+                print(highest_gw_score)
+        
+        for member in self.league_data:
+            max_points = max(member['gw_points'])
+            if max_points == highest_gw_score[0]['points'] and not(member['team_name'] == highest_gw_score[0]['team_name']) and not(member['gw'] == highest_gw_score[0]['gw']):
+                highest_gw_score.append({'team_name': member['team_name'], 'points': max_points, 'gw': member['gw_points'].index(max_points)})
+        print(highest_gw_score)     
         return highest_gw_score
     
   
