@@ -12,7 +12,9 @@ def home():
     fpl_data.create_fpl_list(982237)
     data = fpl_data.get_league_data()
     if type(data[0]) is dict:
-        return render_template('home.html', data = json.dumps(data), league_info= data, chip_dict=fpl_data.get_league_chips(), most_points_single_gw = fpl_data.get_most_points_scored_in_a_gw())
+        return render_template('home.html', data = json.dumps(data), league_info= data, chip_dict=fpl_data.get_league_chips(), 
+                                most_points_single_gw = fpl_data.get_most_points_scored_in_a_gw(), max_points_per_gw = fpl_data.get_max_points_per_gw(),
+                                count_gw_leader=fpl_data.count_gw_leader())
     else:
         return render_template('errorpage.html', error_message = data)
 
@@ -48,4 +50,4 @@ def process_data():
         print(rank)
         return render_template('amiwinning.html', rank_response = response)
     
-    
+
