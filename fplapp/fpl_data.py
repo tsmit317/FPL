@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import requests
-import pprint
+from pprint import pprint
 
 
 class FplData():
@@ -10,7 +10,8 @@ class FplData():
         self.league_data = []
         self.chip_dict = {'Wildcard': 0, 'Triple Captain': 0, 'Bench boost': 0, 'Free hit': 0}
         self.member_highest_gw_score = {}
-        
+        self.gw_points = {}
+        self.max_points_per_gw = []
         
     def request_error_check(self, url):
         try:
@@ -85,6 +86,8 @@ class FplData():
                 member.update(self.get_user_history(member['team_id']))
                 member['max_gw_points'] = max(member['gw_points'])
                 member['max_gw_points_gw'] = member['gw_points'].index(member['max_gw_points'])
+                self.set_gw_points(member)
+        self.find_max_points_per_gw()
     
     def get_league_data(self):
         return self.league_data
@@ -92,10 +95,6 @@ class FplData():
     def get_league_chips(self):
         return self.chip_dict
     
-    # def set_member_max_point_gw(self):
-    #     for member in self.league_data:
-    #         member['max_gw_points'] = max(member['gw_points'])
-    #         member['max_gw_points_gw'] = member['gw_points'].index(member['max_gw_points'])
     
     def get_most_points_scored_in_a_gw(self):
         highest_gw_score = [{'team_name': '', 'points': 0, 'gw': 0}]
@@ -109,8 +108,41 @@ class FplData():
         for member in self.league_data:
             max_points = max(member['gw_points'])
             if max_points == highest_gw_score[0]['points'] and not(member['team_name'] == highest_gw_score[0]['team_name']) and not(member['gw'] == highest_gw_score[0]['gw']):
-                highest_gw_score.append({'team_name': member['team_name'], 'points': max_points, 'gw': member['gw_points'].index(max_points)})
-        print(highest_gw_score)     
+                highest_gw_score.append({'team_name': member['team_name'], 'points': max_points, 'gw': member['gw_points'].index(max_points)})     
         return highest_gw_score
     
-  
+    def set_gw_points(self, member):
+        for i in range(1, len(member['gw_points'])):
+            if i in self.gw_points:
+                self.gw_points[i].append({'team_name': member['team_name'], 'points': member['gw_points'][i]})
+            else:
+                self.gw_points[i] = [{'team_name': member['team_name'], 'points': member['gw_points'][i]}]
+    
+    def find_max_points_per_gw(self):
+        for k, v in self.gw_points.items():
+            max_points = max(v, key=lambda x:x['points'])['points']
+            l = []
+            for i in v:
+                if i['points'] == max_points:
+                    self.max_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
+    
+    def count_gw_leader(self):
+        temp = {}
+        for i in self.league_data:
+            temp[i['team_name']] = 0
+
+        for i in self.max_points_per_gw:
+            temp[i['team_name']] += 1
+        
+        return temp
+        
+    def get_max_points_per_gw(self):
+        return self.max_points_per_gw   
+    
+    
+    def get_gw_points(self):
+        pprint(self.gw_points[1])
+
+# fpl_data = FplData()
+# fpl_data.create_fpl_list(982237)
+# fpl_data.count_gw_leader()
