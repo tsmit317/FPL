@@ -12,6 +12,8 @@ class FplData():
         self.member_highest_gw_score = {}
         self.gw_points = {}
         self.max_points_per_gw = []
+        self.min_points_per_gw = []
+        
         
     def request_error_check(self, url):
         try:
@@ -79,6 +81,7 @@ class FplData():
                 temp['gw_value_diff'].append(temp['total_value'][i] - temp['total_value'][i-1])
         return temp
 
+
     def create_fpl_list(self, league_id):
         self.get_league_users(league_id)
         if type(self.league_data[0]) is dict:
@@ -88,9 +91,12 @@ class FplData():
                 member['max_gw_points_gw'] = member['gw_points'].index(member['max_gw_points'])
                 self.set_gw_points(member)
         self.find_max_points_per_gw()
-    
+        self.find_min_points_per_gw()
+        
+        
     def get_league_data(self):
         return self.league_data
+
 
     def get_league_chips(self):
         return self.chip_dict
@@ -126,6 +132,15 @@ class FplData():
                 if i['points'] == max_points:
                     self.max_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
     
+    
+    def find_min_points_per_gw(self):
+        for k, v in self.gw_points.items():
+            min_points = min(v, key=lambda x:x['points'])['points']
+            l = []
+            for i in v:
+                if i['points'] == min_points:
+                    self.min_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
+    
     def count_gw_leader(self):
         temp = {}
         for i in self.league_data:
@@ -136,6 +151,20 @@ class FplData():
         
         return temp
         
+    def count_gw_lowest(self):
+        temp = {}
+        for i in self.league_data:
+            temp[i['team_name']] = 0
+
+        for i in self.min_points_per_gw:
+            temp[i['team_name']] += 1
+        
+        return temp
+    
+    
+    def get_min_points_per_gw(self):
+        return self.min_points_per_gw
+    
     def get_max_points_per_gw(self):
         return self.max_points_per_gw   
     
@@ -145,4 +174,5 @@ class FplData():
 
 # fpl_data = FplData()
 # fpl_data.create_fpl_list(982237)
+# print(fpl_data.get_min_points_per_gw())
 # fpl_data.count_gw_leader()
