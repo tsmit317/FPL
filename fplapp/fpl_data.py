@@ -58,8 +58,14 @@ class FplData():
             temp['gw'].append(int(i['event']))
             temp['gw_points'].append(int(i['points']))
             temp['total_points'].append(int(i['total_points']))
-            temp['gw_rank'].append(int(i['rank']))
-            temp['rank_sort'].append(int(i['rank_sort']))
+            if i['rank'] == None or i['rank'] == 'null':
+                temp['gw_rank'].append(0)
+            elif type(i['rank']) is int:
+                temp['gw_rank'].append(int(i['rank']))
+            if i['rank_sort'] == None or i['rank_sort'] == 'null':
+                temp['rank_sort'].append(0)
+            elif type(i['rank_sort']) is int:
+                temp['rank_sort'].append(int(i['rank_sort']))
             temp['overall_rank'].append(int(i['overall_rank']))
             temp['bank'].append(float(i['bank'])/10)
             temp['gw_bench_points'].append(int(i['points_on_bench']))
