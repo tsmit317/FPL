@@ -51,7 +51,7 @@
                     <td>-</td>
                   {% endif %}
                     <td>{{member.team_name}}</td>
-                    <td>{{member.gw_points[-1]}}</td>
+                    <td>{{member.gw_points[-1] - member.gw_transfer_cost[-1]}}</td>
                     <td>{{member.total_points[-1]}}</td> 
                     <td>{{member.total_points[-1] - leader_points}}</td>  
                 </tr>
@@ -73,16 +73,13 @@
             </tr>
           </thead>
           <tbody>
-              {% for member in league_info %}
-                {% if member.chips %}
-                  {%for chip in member.chips%}
+              {% for chip in chip_used_list %}
+                
                     <tr>
-                      <td>{{member.team_name}}</td>
+                      <td>{{chip.team_name}}</td>
                       <td>{{chip.name}}</td>
                       <td>{{chip.gw_used}}</td> 
                     </tr>
-                  {% endfor %}
-                {% endif %}
               {% endfor %} 
           </tbody>
         </table>
@@ -227,10 +224,10 @@
             </tr>
           </thead>
           <tbody>
-              {% for k, v in count_gw_leader.items() %}
+              {% for item in count_gw_leader %}
                 <tr>
-                    <td>{{k}}</td>
-                    <td>{{v}}</td> 
+                    <td>{{item[0]}}</td>
+                    <td>{{item[1]}}</td> 
                 </tr>
               {% endfor %}
           </tbody>
@@ -271,10 +268,10 @@
             </tr>
           </thead>
           <tbody>
-              {% for k, v in count_gw_lowest.items() %}
+              {% for item in count_gw_lowest %}
                 <tr>
-                    <td>{{k}}</td>
-                    <td>{{v}}</td> 
+                    <td>{{item[0]}}</td>
+                    <td>{{item[1]}}</td> 
                 </tr>
               {% endfor %}
           </tbody>
