@@ -20,19 +20,18 @@ def home():
         return render_template('errorpage.html', error_message = data)
 
 
-@app.route('/selectteam', methods=['GET', 'POST'])
-def selectteam():
-    if request.method == 'POST':
+# @app.route('/selectteam', methods=['GET', 'POST'])
+# def selectteam():
+#     if request.method == 'POST':
         
-        request_user_ID = request.form["userID"] 
-        league_info =  fpl.get_user_leagues_info(request_user_ID)
+#         request_user_ID = request.form["userID"] 
         
         
-        if league_info == False:
-            flash('Oh no something went wrong. Please try again!', 'danger')
-            return redirect(url_for('home'))
-        else:
-            return render_template('selectteam.html', league_info = league_info) 
+#         if league_info == False:
+#             flash('Oh no something went wrong. Please try again!', 'danger')
+#             return redirect(url_for('home'))
+#         else:
+#             return render_template('selectteam.html', league_info = league_info) 
 
 
 # Currently not being used 
