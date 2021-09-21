@@ -59,7 +59,7 @@ class FplData():
         
         for i in history_json_response['current']:
             temp['gw'].append(int(i['event']))
-            temp['gw_points'].append(int(i['points']))
+            temp['gw_points'].append(int(i['points'] - i['event_transfers_cost']))
             temp['total_points'].append(int(i['total_points']))
             if i['rank'] == None or i['rank'] == 'null':
                 temp['gw_rank'].append(0)
