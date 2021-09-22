@@ -121,7 +121,6 @@ class FplData():
             if max_points > highest_gw_score[0]['points']:
                 highest_gw_score.pop()
                 highest_gw_score.append({'team_name': member['team_name'], 'points':  max_points, 'gw': member['gw_points'].index(max_points)})
-                print(highest_gw_score)
         
         for member in self.league_data:
             max_points = max(member['gw_points'])
