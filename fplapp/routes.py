@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, request, flash, redirect
 
 from fplapp import app
 from fplapp.fpl_data import FplData
-from fplapp import fpl_players
+from fplapp.fpl_players import FplPlayers
 import json
 
 
@@ -11,6 +11,10 @@ def home():
     fpl_data = FplData()
     fpl_data.create_fpl_list(982237)
     data = fpl_data.get_league_data()
+    
+    fpl_players = FplPlayers()
+    fpl_players.set_team_player_list(data[0]['gw'][-1])
+    
     if type(data[0]) is dict:
         
         return render_template('home.html', data = json.dumps(data), league_info= data, chip_dict=fpl_data.get_chip_count(), chip_used_list = fpl_data.get_chips_used_list(),
