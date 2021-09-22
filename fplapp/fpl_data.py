@@ -180,8 +180,7 @@ class FplData():
         return self.max_points_per_gw   
     
     
-    def get_gw_points(self):
-        pprint(self.gw_points[1])
+    
 
 # fpl_data = FplData()
 # fpl_data.create_fpl_list(982237)
