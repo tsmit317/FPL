@@ -279,7 +279,31 @@
       </div>
     </div>
     
-    
+    <div class="row">
+      <div class="container col">
+        <table class="table table-striped table-dark table-hover ">
+          <thead>
+          <tr >
+              <th colspan="3" class="text-center">{{fpl_players[0]['team_name']}}</th>
+            </tr>
+            <tr>
+              <th scope="col">Player</th>
+              <th scope="col">Team</th>
+              <th scope="col">GW Points</th>
+            </tr>
+          </thead>
+          <tbody>
+              {% for player in fpl_players[0]['players'] %}
+                <tr>
+                  <td>{{player['first_name']}} {{player['second_name']}}</td>
+                  <td>{{player['team']}}</td>
+                  <td>{{player['event_points']}}</td>
+                </tr>
+              {% endfor %} 
+          </tbody>
+        </table>
+      </div>
+    </div>
     <!--Charts-->
     <div class="main_wrapper">
       <div class="canvas_wrapper pb-3">
@@ -531,6 +555,8 @@ var myChart1 = new Chart(ctx, {
       datasets: createLineDataset('total_points')
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: true,
       scales: {
         y: {
           grid: {
@@ -582,6 +608,8 @@ var myChart2 = new Chart(ctx2, {
       datasets: createLineDataset('gw_points')
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: true,
       scales: {
         y: {
           title:{
