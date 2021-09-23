@@ -30,19 +30,16 @@ class FplPlayers():
 
         league = pd.DataFrame(r['standings']['results'])
 
-
-        
         for i in league.index:
             regUrl = f"https://fantasy.premierleague.com/api/entry/{league['entry'][i]}/event/{gw}/picks/"
             req = requests.get(regUrl)
             if req.status_code != 404:
                 r = req.json()
-            r.keys()
 
             user = pd.DataFrame(r['picks'])
-            user2 = user.rename(columns={"element":"id","position": "team_position"})
-            to_dict = user2.merge(slim_elements_df, on="id", how="left")
-            self.player_list.append({'team_name': league['entry_name'][i], 'players': to_dict.T.to_dict().values()})
+            user = user.rename(columns={"element":"id","position": "team_position"})
+            user = user.merge(slim_elements_df, on="id", how="left")
+            self.player_list.append({'team_name': league['entry_name'][i], 'players': user.T.to_dict().values()})
         
     def get_team_player_list(self):
         return self.player_list

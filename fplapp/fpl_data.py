@@ -8,16 +8,15 @@ class FplData():
     
     def __init__(self):
         self.league_data = []
+        self.league_member_ids = []
         self.chip_count_dict = {'Wildcard': 0, 'Triple Captain': 0, 'Bench boost': 0, 'Free hit': 0}
         self.chips_used = []
         self.member_highest_gw_score = {}
         self.gw_points = {}
         self.max_points_per_gw = []
         self.min_points_per_gw = []
-        
-        
-        
-        
+
+
     def request_error_check(self, url):
         try:
             req = requests.get(url)
@@ -32,26 +31,25 @@ class FplData():
             return (f"Uh Oh: Something Else {err}")
         
         return req.json()
-        
-        
+
+
     def get_league_users(self, league_id):
         url = f"https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/"
-        
         league_json_response = self.request_error_check(url)
         if type(league_json_response) is str:
             self.league_data = league_json_response
         else:
             for person in league_json_response['standings']['results']:
+                self.league_member_ids.append(person['entry'])
                 self.league_data.append({'name': person['player_name'], 'team_id': person['entry'], 'team_name': person['entry_name'], 'rank': person['rank'], 'last_rank': person['last_rank']})
-    
-    
+
+
     def get_user_history(self, user_id, team_name):
         url = f"https://fantasy.premierleague.com/api/entry/{user_id}/history/"
         
         history_json_response = self.request_error_check(url)
         if type(history_json_response) is str:
             self.league_data = history_json_response
-        
 
         temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'gw_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
             'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
@@ -103,17 +101,20 @@ class FplData():
                 self.set_gw_points(member)
         self.find_max_points_per_gw()
         self.find_min_points_per_gw()
-        
-        
+
+
     def get_league_data(self):
         return self.league_data
 
+
     def get_chip_count(self):
         return self.chip_count_dict
-    
+
+
     def get_chips_used_list(self):
         return sorted(self.chips_used, key=lambda k: k['gw_used'])
-    
+
+
     def get_most_points_scored_in_a_gw(self):
         highest_gw_score = [{'team_name': '', 'points': 0, 'gw': 0}]
         for member in self.league_data:
@@ -127,14 +128,16 @@ class FplData():
             if max_points == highest_gw_score[0]['points'] and not(member['team_name'] == highest_gw_score[0]['team_name']) and not(member['gw'] == highest_gw_score[0]['gw']):
                 highest_gw_score.append({'team_name': member['team_name'], 'points': max_points, 'gw': member['gw_points'].index(max_points)})     
         return highest_gw_score
-    
+
+
     def set_gw_points(self, member):
         for i in range(1, len(member['gw_points'])):
             if i in self.gw_points:
                 self.gw_points[i].append({'team_name': member['team_name'], 'points': member['gw_points'][i]})
             else:
                 self.gw_points[i] = [{'team_name': member['team_name'], 'points': member['gw_points'][i]}]
-    
+
+
     def find_max_points_per_gw(self):
         for k, v in self.gw_points.items():
             max_points = max(v, key=lambda x:x['points'])['points']
@@ -142,8 +145,8 @@ class FplData():
             for i in v:
                 if i['points'] == max_points:
                     self.max_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
-    
-    
+
+
     def find_min_points_per_gw(self):
         for k, v in self.gw_points.items():
             min_points = min(v, key=lambda x:x['points'])['points']
@@ -151,36 +154,35 @@ class FplData():
             for i in v:
                 if i['points'] == min_points:
                     self.min_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
-    
+
+
     def count_gw_leader(self):
         temp = {}
         for i in self.league_data:
             temp[i['team_name']] = 0
-
         for i in self.max_points_per_gw:
             temp[i['team_name']] += 1
         
         return sorted(temp.items(), key=lambda x: x[1], reverse=True)
-        
+
+
     def count_gw_lowest(self):
         temp = {}
         for i in self.league_data:
             temp[i['team_name']] = 0
-
         for i in self.min_points_per_gw:
             temp[i['team_name']] += 1
         
         return sorted(temp.items(), key=lambda x: x[1], reverse=True)
-    
-    
+
+
     def get_min_points_per_gw(self):
         return self.min_points_per_gw
-    
+
+
     def get_max_points_per_gw(self):
         return self.max_points_per_gw   
-    
-    
-    
+
 
 # fpl_data = FplData()
 # fpl_data.create_fpl_list(982237)
