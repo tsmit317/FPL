@@ -40,8 +40,9 @@ class FplData():
             self.league_data = league_json_response
         else:
             for person in league_json_response['standings']['results']:
-                self.league_member_ids.append(person['entry'])
-                self.league_data.append({'name': person['player_name'], 'team_id': person['entry'], 'team_name': person['entry_name'], 'rank': person['rank'], 'last_rank': person['last_rank']})
+                self.league_member_ids.append(person.get('entry'))
+                self.league_data.append({ 'name': person.get('player_name'), 'team_id': person.get('entry'), 
+                                        'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')})
 
 
     def get_user_history(self, user_id, team_name):
@@ -81,7 +82,7 @@ class FplData():
         for i in history_json_response['past']:
             temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
         for i in history_json_response['chips']:
-            chip_names = {'wildcard': 'Wildcard', '3xc': "Triple Captain"}
+            chip_names = {'wildcard': 'Wildcard', '3xc': "Triple Captain", 'bboost': "Bench Boost"}
             temp['chips'].append({'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chips_used.append({'team_name': team_name,'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chip_count_dict[chip_names[i['name']]] += 1
