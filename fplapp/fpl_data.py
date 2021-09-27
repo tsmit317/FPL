@@ -82,7 +82,7 @@ class FplData():
         for i in history_json_response['past']:
             temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
         for i in history_json_response['chips']:
-            chip_names = {'wildcard': 'Wildcard', '3xc': "Triple Captain", 'bboost': "Bench Boost"}
+            chip_names = {'wildcard': 'Wildcard', '3xc': "Triple Captain", 'bboost':"Bench boost"}
             temp['chips'].append({'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chips_used.append({'team_name': team_name,'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chip_count_dict[chip_names[i['name']]] += 1
