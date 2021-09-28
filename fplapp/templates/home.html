@@ -283,25 +283,20 @@
       <div class="container col">
         <table class="table table-striped table-dark table-hover ">
           <thead>
-          <tr >
-              <th colspan="3" class="text-center">{{fpl_players[0]['team_name']}}</th>
-            </tr>
             <tr>
               <th scope="col">Player</th>
-              <th scope="col">Team</th>
-              <th scope="col">GW Points</th>
             </tr>
           </thead>
           <tbody>
-              {% for player in fpl_players[0]['players'] %}
-                <tr>
-                  <td>{{player['first_name']}} {{player['second_name']}}</td>
-                  <td>{{player['team']}}</td>
-                  <td>{{player['event_points']}}</td>
+              {% for member in fpl_players %}
+                <tr data-toggle="modal" data-target="#playerListModal{{member.team_id}}">
+                  <td>{{member['team_name']}}</td>
+                  
                 </tr>
               {% endfor %} 
           </tbody>
         </table>
+        
       </div>
     </div>
     <!--Charts-->
@@ -510,6 +505,52 @@
   </div>
 {% endfor %}
 
+
+{% for member in fpl_players %}
+  <div class="modal fade" id="playerListModal{{member.team_id}}" tabindex="-1" role="dialog" aria-labelledby="playerListModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content bg-dark">
+        <div class="modal-header">
+          <h5 class="modal-title text-white" id="playerListModalLabel">{{member.team_name}} - Current Team</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">    
+              <div class="row">
+                <div class="col-md-12">
+                  <table class="table table-striped table-dark table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Player</th>
+                      <th scope="col">Team</th>
+                      <th scope="col">GW Points</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      {% for player in member.players %}
+                        <tr>
+                          <td>{{player['second_name']}}</td>
+                          <td>{{player['team']}}</td>
+                          <td>{{player['event_points']}}</td>
+                        </tr>
+                      {% endfor %} 
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+  
 
 <script>
 let datajs = JSON.parse({{data | tojson}});
