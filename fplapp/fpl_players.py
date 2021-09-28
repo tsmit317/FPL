@@ -39,8 +39,9 @@ class FplPlayers():
             user = pd.DataFrame(r['picks'])
             user = user.rename(columns={"element":"id","position": "team_position"})
             user = user.merge(slim_elements_df, on="id", how="left")
-            self.player_list.append({'team_name': league['entry_name'][i], 'players': user.T.to_dict().values()})
+            self.player_list.append({'team_name': league['entry_name'][i], 'team_id': league['entry'][i], 'players': user.T.to_dict().values()})
         
     def get_team_player_list(self):
         return self.player_list
 
+   
