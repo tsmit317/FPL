@@ -5,6 +5,7 @@ import numpy as np
 class FplPlayers():
     def __init__(self):
         self.player_list = []
+        self.teams_df = None
         
     def get_all_epl_players(self):
         regUrl = 'https://fantasy.premierleague.com/api/bootstrap-static/'
@@ -14,11 +15,11 @@ class FplPlayers():
             
         elements_df = pd.DataFrame(r['elements'])
         elements_types_df = pd.DataFrame(r['element_types'])
-        teams_df = pd.DataFrame(r['teams'])
+        self.teams_df = pd.DataFrame(r['teams'])
 
         slim_elements_df = elements_df[['id','second_name','first_name','team','event_points','form','element_type','selected_by_percent','now_cost','minutes','transfers_in','transfers_out','value_season','total_points']]
         slim_elements_df['position'] = slim_elements_df.element_type.map(elements_types_df.set_index('id').singular_name_short)
-        slim_elements_df['team'] = slim_elements_df.team.map(teams_df.set_index('id').name)
+        slim_elements_df['team'] = slim_elements_df.team.map(self.teams_df.set_index('id').short_name)
         return slim_elements_df
 
     def set_team_player_list(self, gw):
@@ -38,10 +39,26 @@ class FplPlayers():
 
             user = pd.DataFrame(r['picks'])
             user = user.rename(columns={"element":"id","position": "team_position"})
+        
+            fixtures_df = pd.DataFrame()
+            for j in user['id']:
+                regUrl = f"https://fantasy.premierleague.com/api/element-summary/{j}/"
+                req = requests.get(regUrl)
+                if req.status_code != 404:
+                    r = req.json()
+
+                sfix = pd.DataFrame(r['fixtures'][0], index=[0])
+                sfix['player_id'] = j
+                fixtures_df = fixtures_df.append(sfix, ignore_index = True )
+
+            fixtures_df = fixtures_df.drop(['id'], axis=1).rename({'player_id': 'id'}, axis=1)
+            fixtures_df['opponent'] = np.where(fixtures_df['is_home'] == True, fixtures_df.team_a.map(self.teams_df.set_index('id').short_name), fixtures_df.team_h.map(self.teams_df.set_index('id').short_name))
+            
             user = user.merge(slim_elements_df, on="id", how="left")
+            user = user.merge(fixtures_df[['id','difficulty', 'opponent']], on="id", how="left")
+                
             self.player_list.append({'team_name': league['entry_name'][i], 'team_id': league['entry'][i], 'players': user.T.to_dict().values()})
         
     def get_team_player_list(self):
         return self.player_list
 
-   
