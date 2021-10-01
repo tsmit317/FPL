@@ -42,7 +42,7 @@ class FplPlayers():
             user = user.merge(slim_elements_df, on="id", how="left")
             
             fixtures_df = self.set_fixtures_df(user['id'])
-            user = user.merge(fixtures_df[['id','difficulty', 'opponent']], on="id", how="left")
+            user = user.merge(fixtures_df[['id','difficulty', 'opponent', 'is_home']], on="id", how="left")
             
             self.player_list.append({'team_name': league['entry_name'][i], 'team_id': league['entry'][i], 'players': user.T.to_dict().values()})
 
