@@ -553,13 +553,13 @@
                             {%endif%}
                           </td>
                           
-                          <td>{{player['position']}}</td>
-                          <td>{{player['team']}}</td>
-                          <td>{{player['event_points'] * player['multiplier']}}</td>
-                          <td>{{player['total_points']}}</td>
-                          <td>{{player['form']}}</td>
-                          <td>{{player['now_cost'] / 10}} </td>
-                          <td>{{player['selected_by_percent']}} </td>
+                          <td class="text-center">{{player['position']}}</td>
+                          <td class="text-center">{{player['team']}}</td>
+                          <td class="text-center">{{player['event_points'] * player['multiplier']}}</td>
+                          <td class="text-center">{{player['total_points']}}</td>
+                          <td class="text-center">{{player['form']}}</td>
+                          <td class="text-center">{{player['now_cost'] / 10}} </td>
+                          <td class="text-center">{{player['selected_by_percent']}} </td>
                           {% if player['difficulty'] == 1 %}
                           <td><div class="container rounded bg-success text-center">{{player['opponent']}}<div></td>
                           {% elif player['difficulty'] == 2 %}
