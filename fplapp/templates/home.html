@@ -525,7 +525,7 @@
                   <thead>
                     <tr>
                       <th scope="col">Player</th>
-                      <th scope="col">Captained</th>
+                      
                       <th scope="col">Position</th>
                       <th scope="col">Team</th>
                       <th scope="col">GW Points</th>
@@ -540,14 +540,14 @@
                       {% for player in member.players %}
                       
                         <tr>
-                          <td>{{player['second_name']}}</td>
-                          {% if player['is_captain'] == True %}
-                          <td>C</td>
-                          {% elif player['is_vice_captain'] %}
-                          <td>VC</td>
-                          {% else%}
-                          <td> </td>
-                          {% endif%}
+                          <td>{{player['second_name']}} 
+                            {% if player['is_captain'] == True %}
+                              <span><img src="static/images/captain-icon.png" style="height:1em; width:1em; vertical-align: middle;"></span>
+                            {% elif player['is_vice_captain'] == True%}
+                              <span><img src="static/images/vc-icon.png" style="height:1em; width:1em; vertical-align: middle;"></span>
+                            {%endif%}
+                          </td>
+                          
                           <td>{{player['position']}}</td>
                           <td>{{player['team']}}</td>
                           <td>{{player['event_points'] * player['multiplier']}}</td>
