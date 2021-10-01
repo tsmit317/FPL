@@ -436,7 +436,7 @@
                 </table>
                 {% else %}
                 <div class="tenor-gif-embed" data-postid="14754639" data-share-method="host" data-aspect-ratio="2.17687" data-width="100%"><a href="https://tenor.com/view/tumbleweed-napa-dessert-windy-gif-14754639">Tumbleweed Napa GIF</a>from <a href="https://tenor.com/search/tumbleweed-gifs">Tumbleweed GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
-                <p class="text-white text-center">Uh Oh! Theres nothing here. It must be your first season!</p>
+                <p class="text-white text-center">Where is everything? <br>It must be your first season!</p>
                 {% endif %}
               </div>
             </div>
@@ -538,9 +538,7 @@
                   </thead>
                   <tbody>
                       {% for player in member.players %}
-                      {% if loop.index == 11%}
-                        <tr><th colspan="100" class="text-center"  style="border-bottom: 2px solid white; border-top: 2px solid white;">Bench</th></tr>
-                      {% else %}
+                      
                         <tr>
                           <td>{{player['second_name']}}</td>
                           {% if player['is_captain'] == True %}
@@ -569,7 +567,9 @@
                           <td><div class="container rounded bg-danger text-center">{{player['opponent']}}<div></td>
                           {% endif%}
                         </tr>
-                       {% endif %}
+                        {% if loop.index == 11%}
+                        <tr><th colspan="100" class="text-center"  style="border-bottom: 2px solid white; border-top: 2px solid white;">Bench</th></tr>
+                      {% endif %}
                       {% endfor %} 
                   </tbody>
                 </table>
