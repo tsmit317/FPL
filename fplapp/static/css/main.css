@@ -49,3 +49,7 @@ caption {
     text-align: center;
 }
 
+.vertically-centered {
+    display: inline-block;
+    vertical-align: middle;
+}
