@@ -37,13 +37,20 @@ class FplPlayers():
             if req.status_code != 404:
                 r = req.json()
 
+            
             user = pd.DataFrame(r['picks'])
             user = user.rename(columns={"element":"id","position": "team_position"})
             user = user.merge(slim_elements_df, on="id", how="left")
             
             fixtures_df = self.set_fixtures_df(user['id'])
             user = user.merge(fixtures_df[['id','difficulty', 'opponent', 'is_home']], on="id", how="left")
-            
+            if r['automatic_subs']:
+                subs = pd.DataFrame(r['automatic_subs'])
+                user['sub_in'] = np.where(user['id']==subs['element_in'][0], True, False)
+                user['sub_out'] = np.where(user['id']==subs['element_out'][0], True, False)
+            else:
+                user['sub_in'] = False
+                user['sub_out'] = False
             self.player_list.append({'team_name': league['entry_name'][i], 'team_id': league['entry'][i], 'players': user.T.to_dict().values()})
 
     def set_fixtures_df(self, player_picks):
