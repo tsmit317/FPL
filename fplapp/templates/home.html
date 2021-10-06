@@ -538,12 +538,19 @@
                       {% for player in member.players %}
                       {% set home_away = '(H)' if player['is_home'] else '(A)' %}
                         <tr class="align-middle">
-                          <td class="justify-content-center">{{"Ronaldo" if player['second_name'] == "dos Santos Aveiro" else player['second_name'] }} 
+                          <td class="justify-content-center">
+                            {% if player['sub_in'] %}
+                                <span style="color: #00e823">⮝ </span>
+                            {% elif player['sub_out'] %}
+                                <span style="color: red">⮟ </span>
+                            {% endif %}
+                          {{"Ronaldo" if player['second_name'] == "dos Santos Aveiro" else player['second_name'] }} 
                             {% if player['is_captain'] == True %}
-                              <span class="align-text-top"><img  src="static/images/captain-icon.png" style="height:1.5em; width:1.5em;"></span>
+                              <span class="align-text-top"><img  src="static/images/captain-icon.png" style="height:1.5em; width:1.5em;"></span> 
                             {% elif player['is_vice_captain'] == True%}
-                              <span class="align-text-top"><img  src="static/images/vc-icon.png" style="height:1.5em; width:1.5em;"></span>
+                              <span class="align-text-top"><img  src="static/images/vc-icon.png" style="height:1.5em; width:1.5em;"></span> 
                             {%endif%}
+
                           </td>
                           
                           <td class="text-center">{{player['position'][0]}}</td>
