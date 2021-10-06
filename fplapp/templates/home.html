@@ -20,7 +20,6 @@
 
 <div class="container-fluid">
   <div class="row justify-content-lg-center pt-3">
-
     <div class="row">
       <div class="container col">
       <!--League Table-->
@@ -525,7 +524,7 @@
                     <tr>
                       <th scope="col">Player</th>
                       
-                      <th scope="col">Position</th>
+                      <th scope="col">Pos</th>
                       <th scope="col">Team</th>
                       <th scope="col">GW Points</th>
                       <th scope="col">Total Points</th>
@@ -538,16 +537,16 @@
                   <tbody>
                       {% for player in member.players %}
                       {% set home_away = '(H)' if player['is_home'] else '(A)' %}
-                        <tr>
-                          <td>{{"Ronaldo" if player['second_name'] == "dos Santos Aveiro" else player['second_name'] }} 
+                        <tr class="align-middle">
+                          <td class="justify-content-center">{{"Ronaldo" if player['second_name'] == "dos Santos Aveiro" else player['second_name'] }} 
                             {% if player['is_captain'] == True %}
-                              <span><img src="static/images/captain-icon.png" style="height:1em; width:1em; vertical-align: middle;"></span>
+                              <span class="align-text-top"><img  src="static/images/captain-icon.png" style="height:1.5em; width:1.5em;"></span>
                             {% elif player['is_vice_captain'] == True%}
-                              <span><img src="static/images/vc-icon.png" style="height:1em; width:1em; vertical-align: middle;"></span>
+                              <span class="align-text-top"><img  src="static/images/vc-icon.png" style="height:1.5em; width:1.5em;"></span>
                             {%endif%}
                           </td>
                           
-                          <td class="text-center">{{player['position']}}</td>
+                          <td class="text-center">{{player['position'][0]}}</td>
                           <td class="text-center">{{player['team']}}</td>
                           <td class="text-center">{{player['event_points'] * player['multiplier']}}</td>
                           <td class="text-center">{{player['total_points']}}</td>
