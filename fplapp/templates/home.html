@@ -548,7 +548,7 @@
                       {% set home_away = '(H)' if player['is_home'] else '(A)' %}
                       
                         <tr class="align-middle">
-                          <td class="justify-content-center">
+                          <td class="justify-content-center text-nowrap">
                             {% if player['sub_in'] %}
                                 <span style="color: #00e823">⮝ </span>
                             {% elif player['sub_out'] %}
@@ -570,11 +570,11 @@
                           <td class="text-center">{{player['now_cost'] / 10}} </td>
                           <td class="text-center">{{player['selected_by_percent']}} </td>
                           {% if member.is_current_gw == member.gw%}
-                            <td><div class="container rounded text-center" style="{{player['opponent_diff_style']}}">{{player['opponent']}} {{home_away}}</div></td>
+                            <td><div class="container rounded text-nowrap text-center" style="{{player['opponent_diff_style']}}">{{player['opponent']}} {{home_away}}</div></td>
                           {% else %}
                             {% set prev_is_home = '(H)' if player['prev_is_home'] else '(A)' %}
-                            <td><div class="container rounded text-center" style="{{player['prev_opponent_diff_style']}}">{{player['prev_opponent']}} {{prev_is_home}}</div></td>
-                            <td><div class="container rounded text-center" style="{{player['opponent_diff_style']}}">{{player['opponent']}} {{home_away}}</div></td>
+                            <td><div class="container text-nowrap rounded text-center" style="{{player['prev_opponent_diff_style']}} ">{{player['prev_opponent']}} {{prev_is_home}}</div></td>
+                            <td><div class="container text-nowrap rounded text-center" style="{{player['opponent_diff_style']}} ">{{player['opponent']}} {{home_away}}</div></td>
                           {% endif%}
                         </tr>
                         {% if loop.index == 11%}
