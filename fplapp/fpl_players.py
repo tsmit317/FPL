@@ -43,7 +43,7 @@ class FplPlayers():
             user = user.merge(slim_elements_df, on="id", how="left")
             
             fixtures_df = self.set_fixtures_df(user['id'])
-            user = user.merge(fixtures_df[['id','difficulty', 'opponent', 'is_home']], on="id", how="left")
+            user = user.merge(fixtures_df[['id','difficulty', 'opponent', 'is_home', 'event', 'prev_opponent', 'prev_difficulty', 'prev_is_home']], on="id", how="left")
             if r['automatic_subs']:
                 subs = pd.DataFrame(r['automatic_subs'])
                 user['sub_in'] = np.where(user['id']==subs['element_in'][0], True, False)
@@ -51,7 +51,7 @@ class FplPlayers():
             else:
                 user['sub_in'] = False
                 user['sub_out'] = False
-            self.player_list.append({'team_name': league['entry_name'][i], 'team_id': league['entry'][i], 'players': user.T.to_dict().values()})
+            self.player_list.append({'team_name': league['entry_name'][i], 'team_id': league['entry'][i], 'gw':gw, 'is_current_gw': (gw == user.event[0]), 'players': user.T.to_dict().values()})
 
     def set_fixtures_df(self, player_picks):
         fixtures_df = pd.DataFrame()
@@ -63,6 +63,12 @@ class FplPlayers():
 
             single_fixture = pd.DataFrame(r['fixtures'][0], index=[0])
             single_fixture['player_id'] = player_id
+            
+            hist = pd.DataFrame(r['history'][-1], index=[0])
+            hist['prev_opponent'] = hist.opponent_team.map(self.teams_df.set_index('id').short_name)
+            hist['prev_difficulty'] = hist.opponent_team.map(self.teams_df.set_index('id').strength)
+            hist = hist.rename(columns={"was_home": "prev_is_home", 'element': 'player_id'})
+            single_fixture = single_fixture.merge(hist[['player_id','prev_opponent', 'prev_difficulty', 'prev_is_home']], on="player_id", how="left")
             fixtures_df = fixtures_df.append(single_fixture, ignore_index = True )
 
         fixtures_df = fixtures_df.drop(['id'], axis=1).rename({'player_id': 'id'}, axis=1)
