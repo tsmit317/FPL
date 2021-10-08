@@ -44,6 +44,11 @@ class FplPlayers():
             
             fixtures_df = self.set_fixtures_df(user['id'])
             user = user.merge(fixtures_df[['id','difficulty', 'opponent', 'is_home', 'event', 'prev_opponent', 'prev_difficulty', 'prev_is_home']], on="id", how="left")
+            
+            difficulty_color = {1: 'background-color: #375523; color: white;', 2: 'background-color: #01fc7a; color:black;', 3: 'background-color: #e7e7e7; color: black;', 4: 'background-color: #ff1751; color:white;', 5: 'background-color: #80072d; color: white;'}
+            user['opponent_diff_style'] = user.difficulty.map(difficulty_color)
+            user['prev_opponent_diff_style'] = user.prev_difficulty.map(difficulty_color)
+            
             if r['automatic_subs']:
                 subs = pd.DataFrame(r['automatic_subs'])
                 user['sub_in'] = np.where(user['id']==subs['element_in'][0], True, False)
@@ -69,6 +74,8 @@ class FplPlayers():
             hist['prev_difficulty'] = hist.opponent_team.map(self.teams_df.set_index('id').strength)
             hist = hist.rename(columns={"was_home": "prev_is_home", 'element': 'player_id'})
             single_fixture = single_fixture.merge(hist[['player_id','prev_opponent', 'prev_difficulty', 'prev_is_home']], on="player_id", how="left")
+            
+            
             fixtures_df = fixtures_df.append(single_fixture, ignore_index = True )
 
         fixtures_df = fixtures_df.drop(['id'], axis=1).rename({'player_id': 'id'}, axis=1)
