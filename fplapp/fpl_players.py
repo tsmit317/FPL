@@ -7,15 +7,29 @@ class FplPlayers():
         self.player_list = []
         self.teams_df = None
         
+    def request_error_check(self, url):
+        try:
+            req = requests.get(url)
+            req.raise_for_status()
+        except requests.exceptions.HTTPError as errh:
+            return (f"Http Error: {errh}")
+        except requests.exceptions.ConnectionError as errc:
+            return (f"Error Connecting: {errc}")
+        except requests.exceptions.Timeout as errt:
+            return (f"Timeout Error: {errt}")
+        except requests.exceptions.RequestException as err:
+            return (f"Uh Oh: Something Else {err}")
+        
+        return req.json()
+        
     def get_all_epl_players(self):
         regUrl = 'https://fantasy.premierleague.com/api/bootstrap-static/'
-        req = requests.get(regUrl)
-        if req.status_code != 404:
-            r = req.json()
+        req = self.request_error_check(regUrl)
+        
             
-        elements_df = pd.DataFrame(r['elements'])
-        elements_types_df = pd.DataFrame(r['element_types'])
-        self.teams_df = pd.DataFrame(r['teams'])
+        elements_df = pd.DataFrame(req['elements'])
+        elements_types_df = pd.DataFrame(req['element_types'])
+        self.teams_df = pd.DataFrame(req['teams'])
 
         slim_elements_df = elements_df[['id','second_name','first_name','team','event_points','form','element_type',
                                         'selected_by_percent','now_cost','minutes','transfers_in','transfers_out','value_season','total_points']]
@@ -26,19 +40,17 @@ class FplPlayers():
     def set_team_player_list(self, gw):
         slim_elements_df = self.get_all_epl_players()
         url = 'https://fantasy.premierleague.com/api/leagues-classic/982237/standings/'
-        req = requests.get(url)
-        if req.status_code != 404:
-            r = req.json()
+        req = self.request_error_check(url)
+        
 
-        league = pd.DataFrame(r['standings']['results'])
+        league = pd.DataFrame(req['standings']['results'])
         for i in league.index:
             regUrl = f"https://fantasy.premierleague.com/api/entry/{league['entry'][i]}/event/{gw}/picks/"
-            req = requests.get(regUrl)
-            if req.status_code != 404:
-                r = req.json()
+            req = self.request_error_check(regUrl)
+            
 
             
-            user = pd.DataFrame(r['picks'])
+            user = pd.DataFrame(req['picks'])
             user = user.rename(columns={"element":"id","position": "team_position"})
             user = user.merge(slim_elements_df, on="id", how="left")
             
@@ -49,8 +61,8 @@ class FplPlayers():
             user['opponent_diff_style'] = user.difficulty.map(difficulty_color)
             user['prev_opponent_diff_style'] = user.prev_difficulty.map(difficulty_color)
             
-            if r['automatic_subs']:
-                subs = pd.DataFrame(r['automatic_subs'])
+            if req['automatic_subs']:
+                subs = pd.DataFrame(req['automatic_subs'])
                 user['sub_in'] = np.where(user['id']==subs['element_in'][0], True, False)
                 user['sub_out'] = np.where(user['id']==subs['element_out'][0], True, False)
             else:
@@ -62,14 +74,12 @@ class FplPlayers():
         fixtures_df = pd.DataFrame()
         for player_id in player_picks:
             regUrl = f"https://fantasy.premierleague.com/api/element-summary/{player_id}/"
-            req = requests.get(regUrl)
-            if req.status_code != 404:
-                r = req.json()
-
-            single_fixture = pd.DataFrame(r['fixtures'][0], index=[0])
+            req = self.request_error_check(regUrl)
+            
+            single_fixture = pd.DataFrame(req['fixtures'][0], index=[0])
             single_fixture['player_id'] = player_id
             
-            hist = pd.DataFrame(r['history'][-1], index=[0])
+            hist = pd.DataFrame(req['history'][-1], index=[0])
             hist['prev_opponent'] = hist.opponent_team.map(self.teams_df.set_index('id').short_name)
             hist['prev_difficulty'] = hist.opponent_team.map(self.teams_df.set_index('id').strength)
             hist = hist.rename(columns={"was_home": "prev_is_home", 'element': 'player_id'})
