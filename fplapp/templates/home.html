@@ -214,10 +214,12 @@
           </thead>
           <tbody>
               {% for item in count_gw_leader %}
-                <tr>
-                    <td>{{item[0]}}</td>
-                    <td>{{item[1]}}</td> 
-                </tr>
+                {% if item[1] > 0 %}
+                  <tr>
+                      <td>{{item[0]}}</td>
+                      <td>{{item[1]}}</td> 
+                  </tr>
+                {% endif %}
               {% endfor %}
           </tbody>
         </table>
@@ -258,10 +260,12 @@
           </thead>
           <tbody>
               {% for item in count_gw_lowest %}
-                <tr>
-                  <td>{{item[0]}}</td>
-                  <td>{{item[1]}}</td> 
-                </tr>
+                {% if item[1] > 0 %}
+                  <tr>
+                      <td>{{item[0]}}</td>
+                      <td>{{item[1]}}</td> 
+                  </tr>
+                {% endif %}
               {% endfor %}
           </tbody>
         </table>
