@@ -31,9 +31,9 @@
                 <tr data-toggle="modal" data-target="#newModal{{member.team_id}}">
                   <td>{{loop.index}}</td>
                   {%if member.rank > member.last_rank %}
-                    <td><span style="color: red">▼ </span>{{member.last_rank}}</td>
+                    <td><span class="down-arrow">▼ </span>{{member.last_rank}}</td>
                   {% elif member.rank < member.last_rank %}
-                    <td><span style="color: #00e823">▲ </span>{{member.last_rank}}</td>
+                    <td><span class="up-arrow">▲ </span>{{member.last_rank}}</td>
                   {% else %}
                     <td>-</td>
                   {% endif %}
@@ -142,9 +142,9 @@
                   <td>{{member.team_value[-1]}}</td> 
                   <td>{{member.bank[-1]}}</td>
                   {%if member.gw_value_diff[-1] < 0 %}
-                    <td><span style="color: red">▼ </span>{{"%.2f"|format(member.gw_value_diff[-1])}}</td>
+                    <td><span class="down-arrow">▼ </span>{{"%.2f"|format(member.gw_value_diff[-1])}}</td>
                   {% elif member.gw_value_diff[-1] > 0 %}
-                    <td><span style="color: #00e823">▲ </span>{{"%.2f"|format(member.gw_value_diff[-1])}}</td>
+                    <td><span class="up-arrow">▲ </span>{{"%.2f"|format(member.gw_value_diff[-1])}}</td>
                   {% else %}
                     <td> - </td>
                   {% endif %}
@@ -474,9 +474,9 @@
                               <td>{{member.bank[i]}}</td>
                               <!--If statement used to determine triangle color-->
                               {% if member.gw_value_diff[i] < 0 %}
-                                <td><span style="color: red">▼ </span>{{"%.2f"|format(member.gw_value_diff[i])}}</td>
+                                <td><span class="down-arrow">▼ </span>{{"%.2f"|format(member.gw_value_diff[i])}}</td>
                               {% elif member.gw_value_diff[i] > 0 %}
-                                <td><span style="color: #00e823">▲ </span>{{"%.2f"|format(member.gw_value_diff[i])}}</td>
+                                <td><span class="up-arrow">▲ </span>{{"%.2f"|format(member.gw_value_diff[i])}}</td>
                               {% else %}
                                 <td> - </td>
                               {% endif %}
@@ -538,9 +538,9 @@
                         <tr class="align-middle">
                           <td class="justify-content-center text-nowrap">
                             {% if player['sub_in'] %}
-                                <span style="color: #00e823">⮝ </span>
+                                <span class="up-arrow">⮝ </span>
                             {% elif player['sub_out'] %}
-                                <span style="color: red">⮟ </span>
+                                <span class="down-arrow">⮟ </span>
                             {% endif %}
                           {{"Ronaldo" if player['second_name'] == "dos Santos Aveiro" else player['second_name'] }} 
                             {% if player['is_captain'] == True %}
