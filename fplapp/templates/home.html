@@ -21,7 +21,7 @@
               <th scope="col">Prev</th>
               <th scope="col">Team</th>
               <th scope="col">GW</th>
-              <th scope="col">Score</th>
+              <th scope="col">Total</th>
               <th scope="col">Behind</th>
             </tr>
           </thead>
@@ -517,12 +517,12 @@
                 <div class="col-auto">
                   <table class="table table-responsive-sm table-dark table-striped table-hover w-auto table-sm text-xsmall">
                   <thead>
-                    <tr>
+                    <tr class="player-table-font">
                       <th scope="col">Player</th>
                       
                       <th scope="col">Pos</th>
                       <th scope="col">Team</th>
-                      <th scope="col">GW Points</th>
+                      <th scope="col">GW Net</th>
                       <th scope="col">Total Points</th>
                       <th scope="col">Form</th>
                       <th scope="col">Value</th>
@@ -539,7 +539,7 @@
                       {% for player in member.players %}
                       {% set home_away = '(H)' if player['is_home'] else '(A)' %}
                       
-                        <tr class="align-middle">
+                        <tr class="align-middle player-table-font">
                           <td class="justify-content-center text-nowrap">
                             {% if player['sub_in'] %}
                                 <span class="up-arrow">⮝ </span>
