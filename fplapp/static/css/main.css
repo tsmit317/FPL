@@ -60,8 +60,17 @@ caption {
     overflow: auto;
     width: auto;
     min-width: 300px;
-  }
-  .modal-body { /* Restrict Modal width to 90% */
+}
+
+.modal-body { /* Restrict Modal width to 90% */
     overflow-x: auto !important;
     max-width: 90vw !important;
-  }
+}
+
+.up-arrow{
+    color: #00e823;
+}
+
+.down-arrow{
+    color: red;
+}
