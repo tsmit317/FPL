@@ -544,9 +544,9 @@
                             {% endif %}
                           {{"Ronaldo" if player['second_name'] == "dos Santos Aveiro" else player['second_name'] }} 
                             {% if player['is_captain'] == True %}
-                              <span class="align-text-top"><img  src="static/images/captain-icon.png" style="height:1.5em; width:1.5em;"></span> 
+                              <span class="align-text-top"><img  src="static/images/captain-icon.png" class="captain-vice-icon"></span> 
                             {% elif player['is_vice_captain'] == True%}
-                              <span class="align-text-top"><img  src="static/images/vc-icon.png" style="height:1.5em; width:1.5em;"></span> 
+                              <span class="align-text-top"><img  src="static/images/vc-icon.png" class="captain-vice-icon"></span> 
                             {%endif%}
                           </td>
                           
