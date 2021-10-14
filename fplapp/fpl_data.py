@@ -33,8 +33,7 @@ class FplData():
         return req.json()
 
     def get_league_users(self, league_id):
-        url = f"https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/"
-        league_json_response = self.request_error_check(url)
+        league_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/")
         if type(league_json_response) is str:
             self.league_data = league_json_response
         else:
@@ -44,9 +43,8 @@ class FplData():
                                         'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')})
 
     def get_user_history(self, user_id, team_name):
-        url = f"https://fantasy.premierleague.com/api/entry/{user_id}/history/"
         
-        history_json_response = self.request_error_check(url)
+        history_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{user_id}/history/")
         if type(history_json_response) is str:
             self.league_data = history_json_response
 

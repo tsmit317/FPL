@@ -39,14 +39,13 @@ class FplPlayers():
 
     def set_team_player_list(self, gw):
         slim_elements_df = self.get_all_epl_players()
-        url = 'https://fantasy.premierleague.com/api/leagues-classic/982237/standings/'
-        req = self.request_error_check(url)
+        
+        req = self.request_error_check('https://fantasy.premierleague.com/api/leagues-classic/982237/standings/')
         
 
         league = pd.DataFrame(req['standings']['results'])
         for i in league.index:
-            regUrl = f"https://fantasy.premierleague.com/api/entry/{league['entry'][i]}/event/{gw}/picks/"
-            req = self.request_error_check(regUrl)
+            req = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{league['entry'][i]}/event/{gw}/picks/")
             
 
             
@@ -73,8 +72,7 @@ class FplPlayers():
     def set_fixtures_df(self, player_picks):
         fixtures_df = pd.DataFrame()
         for player_id in player_picks:
-            regUrl = f"https://fantasy.premierleague.com/api/element-summary/{player_id}/"
-            req = self.request_error_check(regUrl)
+            req = self.request_error_check(f"https://fantasy.premierleague.com/api/element-summary/{player_id}/")
             
             single_fixture = pd.DataFrame(req['fixtures'][0], index=[0])
             single_fixture['player_id'] = player_id
