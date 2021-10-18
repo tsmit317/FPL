@@ -11,6 +11,7 @@ class FplData():
         self.league_member_ids = []
         self.chip_count_dict = {'Wildcard': 0, 'Triple Captain': 0, 'Bench boost': 0, 'Free hit': 0}
         self.chips_used = []
+        self.chips_list = []
         self.member_highest_gw_score = {}
         self.gw_points = {}
         self.max_points_per_gw = []
@@ -77,11 +78,16 @@ class FplData():
         
         for i in history_json_response['past']:
             temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
+        
+        chip_holder = []
         for i in history_json_response['chips']:
             chip_names = {'wildcard': 'Wildcard', '3xc': "Triple Captain", 'bboost':"Bench boost"}
             temp['chips'].append({'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chips_used.append({'team_name': team_name,'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chip_count_dict[chip_names[i['name']]] += 1
+            chip_holder.append(chip_names[i['name']])
+            
+        self.chips_list.append({'team_name': team_name, 'chips': chip_holder})        
         for i in range(len(temp['total_value'])):
             if i > 0:
                 temp['gw_value_diff'].append(temp['total_value'][i] - temp['total_value'][i-1])
@@ -99,6 +105,8 @@ class FplData():
             self.find_max_points_per_gw()
             self.find_min_points_per_gw()
 
+    def get_chips_list(self):
+        return self.chips_list
     def get_league_data(self):
         return self.league_data
 
