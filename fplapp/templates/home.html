@@ -309,9 +309,9 @@
               {% for chip in league_chips %}
                 {% if chip.chips %}
                 <tr>
-                  <td>{{chip.team_name}}</td>
-                  <td>{% for item in chip.chips%}
-                      <span class="align-text-top"><img  src="static/images/{{item}}-icon.png" class="chip-icon"></span> 
+                  <td class="align-middle">{{chip.team_name}}</td>
+                  <td  class="align-middle" style="padding:0px; margin: 0px;">{% for item in chip.chips%}
+                      <img src="static/images/{{item}}-icon.png" class="chip-icon"> 
                       {% endfor %}
                   </td>
                   
