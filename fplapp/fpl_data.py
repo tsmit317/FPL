@@ -9,9 +9,9 @@ class FplData():
     def __init__(self):
         self.league_data = []
         self.league_member_ids = []
-        self.chip_count_dict = {'Wildcard': 0, 'Triple Captain': 0, 'Bench boost': 0, 'Free hit': 0}
+        self.chip_count_dict = {'Wildcard1': 0, 'Triple Captain': 0, 'Bench boost': 0, 'Free hit': 0}
         self.chips_used = []
-        self.chips_list = []
+        self.member_chip_list = []
         self.member_highest_gw_score = {}
         self.gw_points = {}
         self.max_points_per_gw = []
@@ -79,15 +79,24 @@ class FplData():
         for i in history_json_response['past']:
             temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
         
-        chip_holder = []
+        #TODO This is not DRY. Currently doing 4 things. 
+        # 1. Adding chips to the main league member dict 'temp'. Used in league table modal next to GW used. 
+        # 2. Appending to chips_used - This includes the GW. Is currently being used in a sorted table to show who used chips first.
+        # 3. Adding to chip_count_dict to count the total number of chips used in the league. Used to show a percent progress bar.
+        # 4. Appending to member_chip_list. Used in table to show what chips each member has used.
+        temp_member_chip_list = []
         for i in history_json_response['chips']:
-            chip_names = {'wildcard': 'Wildcard', '3xc': "Triple Captain", 'bboost':"Bench boost"}
+            chip_names = {'wildcard': 'Wildcard1', '3xc': "Triple Captain", 'bboost':"Bench boost"}
             temp['chips'].append({'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chips_used.append({'team_name': team_name,'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chip_count_dict[chip_names[i['name']]] += 1
-            chip_holder.append(chip_names[i['name']])
+            temp_member_chip_list.append(chip_names[i['name']])
             
-        self.chips_list.append({'team_name': team_name, 'chips': chip_holder})        
+        self.member_chip_list.append({'team_name': team_name, 'chips': temp_member_chip_list})        
+        
+        # Gets the team value difference for each GW
+        # Skips first GW 
+        # Could possibly do this in jinja
         for i in range(len(temp['total_value'])):
             if i > 0:
                 temp['gw_value_diff'].append(temp['total_value'][i] - temp['total_value'][i-1])
@@ -105,8 +114,9 @@ class FplData():
             self.find_max_points_per_gw()
             self.find_min_points_per_gw()
 
-    def get_chips_list(self):
-        return self.chips_list
+    def get_member_chip_list(self):
+        return self.member_chip_list
+    
     def get_league_data(self):
         return self.league_data
 
