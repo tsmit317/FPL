@@ -9,7 +9,7 @@ class FplData():
     def __init__(self):
         self.league_data = []
         self.league_member_ids = []
-        self.chip_count_dict = {'Wildcard1': 0, 'Triple Captain': 0, 'Bench boost': 0, 'Free hit': 0}
+        self.chip_count_dict = {'Wildcard1': 0, 'Triple-Captain': 0, 'Bench-boost': 0, 'Free-hit': 0}
         self.chips_used = []
         self.member_chip_list = []
         self.member_highest_gw_score = {}
@@ -18,7 +18,7 @@ class FplData():
         self.min_points_per_gw = []
 
     # TODO Request does not account for fpl-api updating
-    # When FPL weekly deadline occurs, json returns 'Updating' message
+    # When FPL weekly deadline occurs, json returns 'Updating' message for about an hour
     def request_error_check(self, url):
         try:
             req = requests.get(url)
@@ -88,7 +88,7 @@ class FplData():
         # 4. Appending to member_chip_list. Used in table to show what chips each member has used.
         temp_member_chip_list = []
         for i in history_json_response['chips']:
-            chip_names = {'wildcard': 'Wildcard1', '3xc': "Triple Captain", 'bboost':"Bench boost"}
+            chip_names = {'wildcard': 'Wildcard1', '3xc': "Triple-Captain", 'bboost':"Bench-boost"}
             temp['chips'].append({'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chips_used.append({'team_name': team_name,'name': chip_names[i['name']], 'gw_used': i['event']})
             self.chip_count_dict[chip_names[i['name']]] += 1
