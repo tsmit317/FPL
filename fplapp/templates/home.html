@@ -310,7 +310,10 @@
                 {% if chip.chips %}
                 <tr>
                   <td>{{chip.team_name}}</td>
-                  <td>{{', '.join(chip.chips)}}</td>
+                  <td>{% for item in chip.chips%}
+                      <span class="align-text-top"><img  src="static/images/{{item}}-icon.png" class="chip-icon"></span> 
+                      {% endfor %}
+                  </td>
                   
                 </tr>
                 {% endif %}
