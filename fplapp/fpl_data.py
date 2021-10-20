@@ -17,7 +17,8 @@ class FplData():
         self.max_points_per_gw = []
         self.min_points_per_gw = []
 
-
+    # TODO Request does not account for fpl-api updating
+    # When FPL weekly deadline occurs, json returns 'Updating' message
     def request_error_check(self, url):
         try:
             req = requests.get(url)
@@ -42,6 +43,7 @@ class FplData():
                 self.league_member_ids.append(person.get('entry'))
                 self.league_data.append({ 'name': person.get('player_name'), 'team_id': person.get('entry'), 
                                         'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')})
+
 
     def get_user_history(self, user_id, team_name):
         
@@ -94,7 +96,7 @@ class FplData():
             
         self.member_chip_list.append({'team_name': team_name, 'chips': temp_member_chip_list})        
         
-        # Gets the team value difference for each GW
+        # TODO Gets the team value difference for each GW
         # Skips first GW 
         # Could possibly do this in jinja
         for i in range(len(temp['total_value'])):
