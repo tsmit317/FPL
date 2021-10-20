@@ -67,7 +67,9 @@
               {% for chip in chip_used_list %}
                 <tr>
                   <td>{{chip.team_name}}</td>
-                  <td>{{chip.name}}</td>
+                  <td class = "align-middle" style="margin: 0px; padding: 0px;" data-toggle="tooltip" data-placement="top" title="{{chip.name}}">
+                    <img src="static/images/{{chip.name}}-icon.png" class="chip-icon"> 
+                  </td>
                   <td>{{chip.gw_used}}</td> 
                 </tr>
               {% endfor %} 
@@ -310,9 +312,10 @@
                 {% if chip.chips %}
                 <tr>
                   <td class="align-middle">{{chip.team_name}}</td>
-                  <td  class="align-middle" style="padding:0px; margin: 0px;">{% for item in chip.chips%}
-                      <img src="static/images/{{item}}-icon.png" class="chip-icon"> 
-                      {% endfor %}
+                  <td  class="align-middle" style="padding:0px; margin: 0px;">
+                  {% for item in chip.chips%}
+                      <img src="static/images/{{item}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{item}}"> 
+                  {% endfor %}
                   </td>
                   
                 </tr>
@@ -624,7 +627,11 @@
   </div>
 {% endfor %}
 
-  
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 
 <script>
 let datajs = JSON.parse({{data | tojson}});
