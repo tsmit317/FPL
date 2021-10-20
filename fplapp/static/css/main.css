@@ -80,6 +80,10 @@ caption {
     width:1.5em;
 }
 
+.chip-icon{
+    height:2em;
+    width:2em;
+}
 .player-table-font{
     font-size: 14px;
 }
