@@ -6,6 +6,7 @@ class FplPlayers():
     def __init__(self):
         self.player_list = []
         self.teams_df = None
+        self.player_picked_league_count = {}
         
     def request_error_check(self, url):
         try:
@@ -47,7 +48,7 @@ class FplPlayers():
         for i in league.index:
             req = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{league['entry'][i]}/event/{gw}/picks/")
             
-
+            self.set_player_picked_league_count(req['picks'])
             
             user = pd.DataFrame(req['picks'])
             user = user.rename(columns={"element":"id","position": "team_position"})
@@ -90,6 +91,20 @@ class FplPlayers():
         fixtures_df['opponent'] = np.where(fixtures_df['is_home'] == True, fixtures_df.team_a.map(self.teams_df.set_index('id').short_name), fixtures_df.team_h.map(self.teams_df.set_index('id').short_name))
         return fixtures_df
 
+    def set_player_picked_league_count(self, picks):
+        player_picks_list = [i['element'] for i in picks]
+            
+        for player_id in player_picks_list:
+            if player_id in self.player_picked_league_count:
+                self.player_picked_league_count[player_id] += 1
+            else:
+                self.player_picked_league_count[player_id] = 1
+                
     def get_team_player_list(self):
         return self.player_list
+    
+    def get_player_picked_league_count(self):
+        return self.player_picked_league_count
 
+    def get_player_picked_league_percent(self, member_count):
+        return {player_id: (count/member_count)*100 for player_id, count in self.player_picked_league_count.items()}
