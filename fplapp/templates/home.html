@@ -75,6 +75,7 @@
               {% endfor %} 
           </tbody>
         </table>
+        
         <table class="table table-striped table-dark table-hover league-table">
           <thead>
             <tr>
@@ -184,6 +185,7 @@
     </div>
     <div class="row">
       <div class="container col">
+        <div class='table-wrapper'>
         <table class="table table-striped table-dark table-hover league-table">
           <thead>
           <tr >
@@ -205,6 +207,7 @@
               {% endfor %} 
           </tbody>
         </table>
+        </div>
       </div>
     
       <div class="container col">
@@ -404,7 +407,7 @@
                             {%endif%}
                             {% for chip in member['chips'] %}
                               {% if i == chip['gw_used'] %}
-                                <td>{{chip['name']}}</td>
+                                <td class='align-middle' style="margin: 0px; padding: 0px;"><img src="static/images/{{chip['name']}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip['name']}}"></td>
                               {% else %}
                                 <td> </td>
                               {% endif %}
@@ -567,6 +570,7 @@
                       <th scope="col">Form</th>
                       <th scope="col">Value</th>
                       <th scope="col">% Selected</th>
+                      <th scope="col">% League</th>
                       {%if member.gw == member.is_current_gw %}
                         <th scope="col">Opp</th>
                       {% else %}
@@ -601,6 +605,7 @@
                           <td class="text-center">{{player['form']}}</td>
                           <td class="text-center">{{player['now_cost'] / 10}} </td>
                           <td class="text-center">{{player['selected_by_percent']}} </td>
+                          <td class="text-center">{{player_league_percent[player['id']]}}</td>
                           {% if member.is_current_gw == member.gw%}
                             <td><div class="container rounded text-nowrap text-center" style="{{player['opponent_diff_style']}}">{{player['opponent']}} {{home_away}}</div></td>
                           {% else %}
