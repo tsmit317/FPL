@@ -87,6 +87,17 @@ caption {
     margin: 0px;
 }
 
+.table-wrapper {
+    max-height: 350px;
+    width: 100%;
+    overflow: auto;
+    display:inline-block;
+}
+
+.center-chip-icon{
+    padding:0px !important;
+    margin: 0px !important;
+}
 .player-table-font{
     font-size: 14px;
 }
