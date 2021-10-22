@@ -15,6 +15,7 @@ def home():
     fpl_players = FplPlayers()
     most_recent_gw = data[0]['gw'][-1]
     fpl_players.set_team_player_list(most_recent_gw) 
+    
     if type(data[0]) is dict:
         
         return render_template('home.html', 
@@ -29,7 +30,8 @@ def home():
                                 count_gw_lowest = fpl_data.count_gw_lowest(), 
                                 fpl_players = fpl_players.get_team_player_list(), 
                                 sorted_value = sorted(data, key=lambda k: k['total_value'][-1], reverse=True), 
-                                league_chips = fpl_data.get_member_chip_list())
+                                league_chips = fpl_data.get_member_chip_list(),
+                                player_league_percent = fpl_players.get_player_picked_league_percent(len(data)))
     else:
         return render_template('errorpage.html', error_message = data)
 
