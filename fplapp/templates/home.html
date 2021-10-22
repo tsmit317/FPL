@@ -67,7 +67,7 @@
               {% for chip in chip_used_list %}
                 <tr>
                   <td>{{chip.team_name}}</td>
-                  <td class = "align-middle" style="margin: 0px; padding: 0px;" data-toggle="tooltip" data-placement="top" title="{{chip.name}}">
+                  <td class = "align-middle center-chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip.name}}">
                     <img src="static/images/{{chip.name}}-icon.png" class="chip-icon"> 
                   </td>
                   <td>{{chip.gw_used}}</td> 
@@ -315,7 +315,7 @@
                 {% if chip.chips %}
                 <tr>
                   <td class="align-middle">{{chip.team_name}}</td>
-                  <td  class="align-middle" style="padding:0px; margin: 0px;">
+                  <td  class="align-middle center-chip-icon">
                   {% for item in chip.chips%}
                       <img src="static/images/{{item}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{item}}"> 
                   {% endfor %}
@@ -407,7 +407,7 @@
                             {%endif%}
                             {% for chip in member['chips'] %}
                               {% if i == chip['gw_used'] %}
-                                <td class='align-middle' style="margin: 0px; padding: 0px;"><img src="static/images/{{chip['name']}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip['name']}}"></td>
+                                <td class='align-middle center-chip-icon'><img src="static/images/{{chip['name']}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip['name']}}"></td>
                               {% else %}
                                 <td> </td>
                               {% endif %}
