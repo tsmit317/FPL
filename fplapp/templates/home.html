@@ -59,7 +59,7 @@
             </tr>
             <tr>
               <th scope="col">Team</th>
-              <th scope="col">Chip</th>
+              <th scope="col" class="text-start">Chip</th>
               <th scope="col">GW</th>
             </tr>
           </thead>
@@ -67,10 +67,10 @@
               {% for chip in chip_used_list %}
                 <tr>
                   <td>{{chip.team_name}}</td>
-                  <td class = "align-middle center-chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip.name}}">
+                  <td class = "align-middle text-center center-chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip.name}}">
                     <img src="static/images/{{chip.name}}-icon.png" class="chip-icon"> 
                   </td>
-                  <td>{{chip.gw_used}}</td> 
+                  <td class="text-end">{{chip.gw_used}}</td> 
                 </tr>
               {% endfor %} 
           </tbody>
@@ -306,7 +306,7 @@
             </tr>
             <tr>
               <th scope="col">Team</th>
-              <th scope="col">Chips</th>
+              <th scope="col" class="text-start">Chips</th>
               
             </tr>
           </thead>
@@ -315,7 +315,7 @@
                 {% if chip.chips %}
                 <tr>
                   <td class="align-middle">{{chip.team_name}}</td>
-                  <td  class="align-middle center-chip-icon">
+                  <td  class="align-middle text-start center-chip-icon">
                   {% for item in chip.chips%}
                       <img src="static/images/{{item}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{item}}"> 
                   {% endfor %}
