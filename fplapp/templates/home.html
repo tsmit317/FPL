@@ -404,16 +404,14 @@
                             <td>{{member.gw_bench_points[i]}}</td>
                             {% if member['chips']|length < 1 %}
                             <td>  </td>
-                            {%endif%}
+                            {% endif %}
+                            <td class='align-middle center-chip-icon'>
                             {% for chip in member['chips'] %}
                               {% if i == chip['gw_used'] %}
-                                <td class='align-middle center-chip-icon'><img src="static/images/{{chip['name']}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip['name']}}"></td>
-                              {% else %}
-                                <td> </td>
+                              <img src="static/images/{{chip['name']}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip['name']}}">
                               {% endif %}
-                            
                             {% endfor %}
-                            
+                            </td>
                           </tr>
                         {% set var = count.append(1) %}
                       {% endfor %} 
