@@ -118,17 +118,6 @@ class FplData():
             self.find_max_points_per_gw()
             self.find_min_points_per_gw()
 
-    def get_member_chip_list(self):
-        return self.member_chip_list
-    
-    def get_league_data(self):
-        return self.league_data
-
-    def get_chip_count(self):
-        return self.chip_count_dict
-
-    def get_chips_used_list(self):
-        return sorted(self.chips_used, key=lambda k: k['gw_used'])
 
     def get_most_points_scored_in_a_gw(self):
         highest_gw_score = [{'team_name': '', 'points': 0, 'gw': 0}]
@@ -190,4 +179,16 @@ class FplData():
 
     def get_max_points_per_gw(self):
         return self.max_points_per_gw   
+    
+    def get_member_chip_list(self):
+        return self.member_chip_list
+    
+    def get_league_data(self):
+        return self.league_data
+
+    def get_chip_count(self):
+        return self.chip_count_dict
+
+    def get_chips_used_list(self):
+        return sorted(self.chips_used, key=lambda k: k['gw_used'])
 
