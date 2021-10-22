@@ -33,7 +33,8 @@ class FplData():
             return (f"Uh Oh: Something Else {err}")
         
         return req.json()
-
+    
+    # TODO Create new method to check JSON response. Violates SRP
     def get_league_users(self, league_id):
         league_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/")
         if type(league_json_response) is str:
@@ -44,7 +45,7 @@ class FplData():
                 self.league_data.append({ 'name': person.get('player_name'), 'team_id': person.get('entry'), 
                                         'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')})
 
-
+    #TODO Create new method to check JSON response. Violates SRP
     def get_user_history(self, user_id, team_name):
         
         history_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{user_id}/history/")
@@ -81,7 +82,7 @@ class FplData():
         for i in history_json_response['past']:
             temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
         
-        #TODO This is not DRY. Currently doing 4 things. 
+        #TODO This is not DRY/SRP. Currently doing 4 things. 
         # 1. Adding chips to the main league member dict 'temp'. Used in league table modal next to GW used. 
         # 2. Appending to chips_used - This includes the GW. Is currently being used in a sorted table to show who used chips first.
         # 3. Adding to chip_count_dict to count the total number of chips used in the league. Used to show a percent progress bar.
@@ -104,6 +105,7 @@ class FplData():
                 temp['gw_value_diff'].append(temp['total_value'][i] - temp['total_value'][i-1])
         return temp
 
+    # TODO Create new method to check JSON response. Violates SRP
     def create_fpl_list(self, league_id):
         self.get_league_users(league_id)
         if type(self.league_data[0]) is dict:
