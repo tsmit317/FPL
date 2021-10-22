@@ -40,11 +40,11 @@
                     <td>-</td>
                   {% endif %}
                     <td>{{member.team_name}}</td>
-                    <td>{{member.gw_points[-1]}}</td>
-                    <td>{{member.total_points[-1]}}</td> 
-                    <td>{{member.total_points[-1] - leader_points}}</td>  
-                    <td>{{member.gw_transfers[-1]}} ({{member.gw_transfer_cost[-1]  * -1}})</td>
-                    <td>{{member.gw_bench_points[-1]}}</td>
+                    <td class="text-end">{{(member.gw_transfer_cost[-1]  * -1) + current_points[member.team_id]}}</td>
+                    <td class="text-end">{{member.total_points[-1]}}</td> 
+                    <td class="text-end">{{member.total_points[-1] - leader_points}}</td>  
+                    <td class="text-end">{{member.gw_transfers[-1]}} ({{member.gw_transfer_cost[-1]  * -1}})</td>
+                    <td class="text-end">{{member.gw_bench_points[-1]}}</td>
                 </tr>
               {% endfor %} 
           </tbody>
