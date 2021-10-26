@@ -45,7 +45,7 @@ class FplData():
                 self.league_data.append({ 'name': person.get('player_name'), 'team_id': person.get('entry'), 
                                         'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')})
 
-    #TODO Create new method to check JSON response. Violates SRP
+    #TODO Create new method to check JSON response. Violates SRP and is SPAGHETTI
     def get_user_history(self, user_id, team_name):
         
         history_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{user_id}/history/")
@@ -54,7 +54,7 @@ class FplData():
 
         temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'gw_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
             'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
-            'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': [], 'total_value': [100.0], 'gw_value_diff':[0]}
+            'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': [], 'total_value': [100.0]}
         
         for i in history_json_response['current']:
             temp['gw'].append(int(i['event']))
@@ -97,14 +97,17 @@ class FplData():
             
         self.member_chip_list.append({'team_name': team_name, 'chips': temp_member_chip_list})        
         
-        # TODO Gets the team value difference for each GW
-        # Skips first GW 
-        # Could possibly do this in jinja
-        for i in range(len(temp['total_value'])):
-            if i > 0:
-                temp['gw_value_diff'].append(temp['total_value'][i] - temp['total_value'][i-1])
+        
+        temp['gw_value_diff'] = self.calc_gw_team_value_diff(temp['total_value'])
+        
         return temp
 
+    def calc_gw_team_value_diff(self, total_value_list):
+        
+        return [total_value_list[i] - total_value_list[i-1] if i > 0 else 0 for i in range(len(total_value_list))]
+                
+    
+    
     # TODO Create new method to check JSON response. Violates SRP
     def create_fpl_list(self, league_id):
         self.get_league_users(league_id)
