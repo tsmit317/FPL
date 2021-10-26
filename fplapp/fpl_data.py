@@ -9,6 +9,7 @@ class FplData():
     def __init__(self):
         self.league_data = []
         self.league_member_ids = []
+        self.chip_names = {"wildcard": "Wildcard1", "3xc": "Triple-Captain", 'bboost': "Bench-boost"}
         self.chip_count_dict = {'Wildcard1': 0, 'Triple-Captain': 0, 'Bench-boost': 0, 'Free-hit': 0}
         self.chips_used = []
         self.member_chip_list = []
@@ -54,7 +55,7 @@ class FplData():
 
         temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'gw_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
             'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
-            'total_transfers': [0],'team_value': [100.0], 'chips': [], 'total_value': [100.0]}
+            'total_transfers': [0],'team_value': [100.0], 'total_value': [100.0]}
         
         for i in history_json_response['current']:
             temp['gw'].append(int(i['event']))
@@ -80,33 +81,33 @@ class FplData():
             temp['team_value'].append(float("{0:.2f}".format(temp['total_value'][-1] - temp['bank'][-1])))
         
         temp['past_seasons'] = self.set_past_seasons(history_json_response['past'])
-        
-        #TODO This is not DRY/SRP. Currently doing 4 things. 
-        # 1. Adding chips to the main league member dict 'temp'. Used in league table modal next to GW used. 
-        # 2. Appending to chips_used - This includes the GW. Is currently being used in a sorted table to show who used chips first.
-        # 3. Adding to chip_count_dict to count the total number of chips used in the league. Used to show a percent progress bar.
-        # 4. Appending to member_chip_list. Used in table to show what chips each member has used.
-        temp_member_chip_list = []
-        for i in history_json_response['chips']:
-            chip_names = {'wildcard': 'Wildcard1', '3xc': "Triple-Captain", 'bboost':"Bench-boost"}
-            temp['chips'].append({'name': chip_names[i['name']], 'gw_used': i['event']})
-            self.chips_used.append({'team_name': team_name,'name': chip_names[i['name']], 'gw_used': i['event']})
-            self.chip_count_dict[chip_names[i['name']]] += 1
-            temp_member_chip_list.append(chip_names[i['name']])
-            
-        self.member_chip_list.append({'team_name': team_name, 'chips': temp_member_chip_list})        
-        
+        temp['chips'] = self.set_player_chips(history_json_response['chips'])
+        self.count_chips(temp['chips'])
+        self.set_chips_used(temp['chips'], team_name)
+        self.set_member_chip_list(temp['chips'], team_name)        
         temp['gw_value_diff'] = self.calc_gw_team_value_diff(temp['total_value'])
         
         return temp
+
+    def set_member_chip_list(self, chip_list, team_name):
+        self.member_chip_list.append({'team_name': team_name, 'chips': [i['chip_name'] for i in chip_list]})
+
+    def set_chips_used(self, chip_list, team_name):
+        for i in chip_list:
+            self.chips_used.append({'team_name': team_name,'chip_name': i['chip_name'], 'gw_used': i['gw_used']})
+
+    def count_chips(self, chip_list):
+        for i in chip_list:
+            self.chip_count_dict[i['chip_name']] += 1
+            
+    def set_player_chips(self, chip_json):
+        return [{'chip_name': self.chip_names[i['name']], 'gw_used': i['event']} for i in chip_json]
 
     def set_past_seasons(self, past_json):
         return [{'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']} for i in past_json]
     
     def calc_gw_team_value_diff(self, total_value_list):
         return [total_value_list[i] - total_value_list[i-1] if i > 0 else 0 for i in range(len(total_value_list))]
-                
-    
     
     # TODO Create new method to check JSON response. Violates SRP
     def create_fpl_list(self, league_id):
