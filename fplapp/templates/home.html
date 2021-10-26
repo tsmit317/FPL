@@ -41,6 +41,7 @@
                   {% endif %}
                     <td>{{member.team_name}}</td>
                     <td class="text-end">{{(member.gw_transfer_cost[-1]  * -1) + current_points[member.team_id]}}</td>
+                    
                     <td class="text-end">{{member.total_points[-1]}}</td> 
                     <td class="text-end">{{member.total_points[-1] - leader_points}}</td>  
                     <td class="text-end">{{member.gw_transfers[-1]}} ({{member.gw_transfer_cost[-1]  * -1}})</td>
@@ -198,7 +199,7 @@
             </tr>
           </thead>
           <tbody>
-              {% for gw in max_points_per_gw %}
+              {% for gw in max_points_per_gw[::-1] %}
                 <tr>
                   <td>{{gw['gw']}}</td>
                   <td>{{gw['team_name']}}</td>
@@ -246,7 +247,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for gw in min_points_per_gw %}
+            {% for gw in min_points_per_gw[::-1] %}
               <tr>
                 <td>{{gw['gw']}}</td>
                 <td>{{gw['team_name']}}</td>
