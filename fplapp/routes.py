@@ -20,7 +20,7 @@ def home():
     for member in fpl_players.get_team_player_list():
         temp[member['team_id']]=0
         for i, player in enumerate(member['players']):
-            if i == 10:
+            if i == 11:
                 break;
         
             temp[member['team_id']] +=player['event_points'] *player['multiplier']
