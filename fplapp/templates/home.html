@@ -33,9 +33,9 @@
                 <tr data-toggle="modal" data-target="#newModal{{member.team_id}}">
                   <td>{{loop.index}}</td>
                   {%if member.rank > member.last_rank %}
-                    <td><span class="down-arrow">▼ </span>{{member.last_rank}}</td>
+                    <td class="align-middle prev-pos"><span class="down-arrow">▼ </span>{{member.last_rank}}</td>
                   {% elif member.rank < member.last_rank %}
-                    <td><span class="up-arrow">▲ </span>{{member.last_rank}}</td>
+                    <td class="align-middle prev-pos"><span class="up-arrow">▲ </span>{{member.last_rank}}</td>
                   {% else %}
                     <td>-</td>
                   {% endif %}
@@ -69,7 +69,7 @@
                 <tr>
                   <td>{{chip.team_name}}</td>
                   <td class = "align-middle text-center center-chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip.chip_name}}">
-                    <img src="static/images/{{chip.chip_name}}-icon.png" class="chip-icon"> 
+                    <img src="static/images/{{chip.chip_name}}-icon2.png" class="chip-icon"> 
                   </td>
                   <td class="text-end">{{chip.gw_used}}</td> 
                 </tr>
