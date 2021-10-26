@@ -27,7 +27,6 @@ class FplPlayers():
         regUrl = 'https://fantasy.premierleague.com/api/bootstrap-static/'
         req = self.request_error_check(regUrl)
         
-            
         elements_df = pd.DataFrame(req['elements'])
         elements_types_df = pd.DataFrame(req['element_types'])
         self.teams_df = pd.DataFrame(req['teams'])
@@ -43,7 +42,6 @@ class FplPlayers():
         
         req = self.request_error_check('https://fantasy.premierleague.com/api/leagues-classic/982237/standings/')
         
-
         league = pd.DataFrame(req['standings']['results'])
         for i in league.index:
             req = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{league['entry'][i]}/event/{gw}/picks/")
