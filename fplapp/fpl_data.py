@@ -54,7 +54,7 @@ class FplData():
 
         temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'gw_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
             'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
-            'total_transfers': [0],'team_value': [100.0], 'chips': [], 'past_seasons': [], 'total_value': [100.0]}
+            'total_transfers': [0],'team_value': [100.0], 'chips': [], 'total_value': [100.0]}
         
         for i in history_json_response['current']:
             temp['gw'].append(int(i['event']))
@@ -79,8 +79,7 @@ class FplData():
             temp['total_value'].append(float(i['value'])/10)
             temp['team_value'].append(float("{0:.2f}".format(temp['total_value'][-1] - temp['bank'][-1])))
         
-        for i in history_json_response['past']:
-            temp['past_seasons'].append({'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']})
+        temp['past_seasons'] = self.set_past_seasons(history_json_response['past'])
         
         #TODO This is not DRY/SRP. Currently doing 4 things. 
         # 1. Adding chips to the main league member dict 'temp'. Used in league table modal next to GW used. 
@@ -97,13 +96,14 @@ class FplData():
             
         self.member_chip_list.append({'team_name': team_name, 'chips': temp_member_chip_list})        
         
-        
         temp['gw_value_diff'] = self.calc_gw_team_value_diff(temp['total_value'])
         
         return temp
 
+    def set_past_seasons(self, past_json):
+        return [{'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']} for i in past_json]
+    
     def calc_gw_team_value_diff(self, total_value_list):
-        
         return [total_value_list[i] - total_value_list[i-1] if i > 0 else 0 for i in range(len(total_value_list))]
                 
     
