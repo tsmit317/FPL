@@ -7,7 +7,7 @@ class FplPlayers():
         self.player_list = []
         self.teams_df = None
         self.player_picked_league_count = {}
-        
+        self.current_points_dict = {}
     def request_error_check(self, url):
         try:
             req = requests.get(url)
@@ -66,7 +66,11 @@ class FplPlayers():
             else:
                 user['sub_in'] = False
                 user['sub_out'] = False
-            self.player_list.append({'team_name': league['entry_name'][i], 'team_id': league['entry'][i], 'gw':gw, 'is_current_gw': (gw == user.event[0]), 'players': user.T.to_dict().values()})
+            
+            user['event_points_multi'] = user['event_points'] * user['multiplier']
+            self.current_points_dict[league['entry'][i]] = user.iloc[:11, user.columns.get_indexer(['event_points_multi'])].sum().values[0]
+            self.player_list.append({'team_name': league['entry_name'][i], 'team_id': league['entry'][i], 'gw':gw, 
+                                    'is_current_gw': (gw == user.event[0]), 'players': user.T.to_dict().values()})
 
     def set_fixtures_df(self, player_picks):
         fixtures_df = pd.DataFrame()
@@ -86,6 +90,8 @@ class FplPlayers():
             fixtures_df = fixtures_df.append(single_fixture, ignore_index = True )
 
         fixtures_df = fixtures_df.drop(['id'], axis=1).rename({'player_id': 'id'}, axis=1)
+        
+        
         fixtures_df['opponent'] = np.where(fixtures_df['is_home'] == True, fixtures_df.team_a.map(self.teams_df.set_index('id').short_name), fixtures_df.team_h.map(self.teams_df.set_index('id').short_name))
         return fixtures_df
 
@@ -106,3 +112,10 @@ class FplPlayers():
 
     def get_player_picked_league_percent(self, member_count):
         return {player_id: (count/member_count)*100 for player_id, count in self.player_picked_league_count.items()}
+    
+    def subtract_tranfer_hits_from_current_points(self, league_list):
+        for i in league_list:
+            self.current_points_dict[i['team_id']] -= i['gw_transfer_cost'][-1]
+    
+    def get_current_points(self):
+        return self.current_points_dict
