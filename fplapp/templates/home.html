@@ -11,7 +11,7 @@
     <div class="row">
       <div class="container col">
       <!--League Table-->
-        <table class="table table-striped table-dark table-hover league-table">
+        <table class="table table-striped table-dark table-hover league-table prev-pos">
           <thead>
             <tr >
               <th colspan="8" class="text-center">League Table</th>
@@ -33,14 +33,14 @@
                 <tr data-toggle="modal" data-target="#newModal{{member.team_id}}">
                   <td>{{loop.index}}</td>
                   {%if member.rank > member.last_rank %}
-                    <td class="align-middle prev-pos"><span class="down-arrow">▼ </span>{{member.last_rank}}</td>
+                    <td class="align-middle text-nowrap"><span class="down-arrow">▼ </span>{{member.last_rank}}</td>
                   {% elif member.rank < member.last_rank %}
-                    <td class="align-middle prev-pos"><span class="up-arrow">▲ </span>{{member.last_rank}}</td>
+                    <td class="align-middle text-nowrap"><span class="up-arrow">▲ </span>{{member.last_rank}}</td>
                   {% else %}
                     <td>-</td>
                   {% endif %}
                     <td>{{member.team_name}}</td>
-                    <td class="text-end">{{(member.gw_transfer_cost[-1]  * -1) + current_points[member.team_id]}}</td>
+                    <td class="text-end">{{current_points[member.team_id]}}</td>
                     
                     <td class="text-end">{{member.total_points[-1]}}</td> 
                     <td class="text-end">{{member.total_points[-1] - leader_points}}</td>  
@@ -60,8 +60,8 @@
             </tr>
             <tr>
               <th scope="col">Team</th>
-              <th scope="col" class="text-start">Chip</th>
-              <th scope="col">GW</th>
+              <th scope="col" class="text-center">Chip</th>
+              <th scope="col" class="text-end">GW</th>
             </tr>
           </thead>
           <tbody>
@@ -320,7 +320,7 @@
                   <td class="align-middle">{{chip.team_name}}</td>
                   <td  class="align-middle text-start center-chip-icon">
                   {% for item in chip.chips%}
-                      <img src="static/images/{{item}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{item}}"> 
+                      <img src="static/images/{{item}}-icon3.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{item}}"> 
                   {% endfor %}
                   </td>
                   
