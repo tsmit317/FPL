@@ -195,4 +195,10 @@ class FplData():
 
     def get_chips_used_list(self):
         return sorted(self.chips_used, key=lambda k: k['gw_used'])
+    
+    def check_total_points_updated(self, current_points):
+        if self.league_data[0]['total_points'][-1] != (self.league_data[0]['total_points'][-2] + current_points[self.league_data[0]['team_id']]):
+            for i in self.league_data:
+                i['total_points'][-1] = i['total_points'][-2] + current_points[i['team_id']]
+        return sorted(self.league_data, key=lambda k: k['total_points'][-1], reverse=True)
 
