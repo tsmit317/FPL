@@ -68,7 +68,7 @@ class FplPlayers():
                 user['sub_out'] = False
             
             user['event_points_multi'] = user['event_points'] * user['multiplier']
-            self.current_points_dict[league['entry'][i]] = user.iloc[:11, user.columns.get_indexer(['event_points_multi'])].sum().values[0]
+            self.current_points_dict[league['entry'][i]] = int(user.iloc[:11, user.columns.get_indexer(['event_points_multi'])].sum().values[0])
             self.player_list.append({'team_name': league['entry_name'][i], 'team_id': league['entry'][i], 'gw':gw, 
                                     'is_current_gw': (gw == user.event[0]), 'players': user.T.to_dict().values()})
 
