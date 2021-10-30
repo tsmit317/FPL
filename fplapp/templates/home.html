@@ -32,9 +32,9 @@
               {% for member in league_info %}
                 <tr data-toggle="modal" data-target="#newModal{{member.team_id}}">
                   <td>{{loop.index}}</td>
-                  {%if member.rank > member.last_rank %}
+                  {%if loop.index > member.last_rank %}
                     <td class="align-middle text-nowrap"><span class="down-arrow">▼ </span>{{member.last_rank}}</td>
-                  {% elif member.rank < member.last_rank %}
+                  {% elif loop.index < member.last_rank %}
                     <td class="align-middle text-nowrap"><span class="up-arrow">▲ </span>{{member.last_rank}}</td>
                   {% else %}
                     <td>-</td>
