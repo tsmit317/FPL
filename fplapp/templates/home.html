@@ -601,7 +601,11 @@
                           
                           <td class="text-center">{{player['position'][0]}}</td>
                           <td class="text-center">{{player['team']}}</td>
-                          <td class="text-center">{{player['event_points'] * player['multiplier']}}</td>
+                          {% if player['multiplier'] > 0 %}
+                            <td class="text-center">{{player['event_points'] * player['multiplier']}}</td>
+                          {% else %}
+                            <td class="text-center">{{player['event_points']}}</td>
+                          {% endif %}
                           <td class="text-center">{{player['total_points']}}</td>
                           <td class="text-center">{{player['form']}}</td>
                           <td class="text-center">{{player['now_cost'] / 10}} </td>
