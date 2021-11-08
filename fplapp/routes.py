@@ -12,20 +12,15 @@ def home():
     fpl_data.create_fpl_list(982237)
     data = fpl_data.get_league_data()
     
-    fpl_players = FplPlayers()
-    most_recent_gw = data[0]['gw'][-1]
-    fpl_players.set_team_player_list(most_recent_gw) 
-    fpl_players.subtract_tranfer_hits_from_current_points(data)
-    
-    current_points = fpl_players.get_current_points()
-    
-    league_data = fpl_data.check_total_points_updated(current_points)
-
-    
-        
     
     if type(data[0]) is dict:
+        fpl_players = FplPlayers()
+        most_recent_gw = data[0]['gw'][-1]
+        fpl_players.set_team_player_list(most_recent_gw) 
+        fpl_players.subtract_tranfer_hits_from_current_points(data)
         
+        current_points = fpl_players.get_current_points()
+        league_data = fpl_data.check_total_points_updated(current_points)
         return render_template('home.html', 
                                 data = json.dumps(league_data),
                                 league_info = league_data, 
@@ -42,7 +37,10 @@ def home():
                                 player_league_percent = fpl_players.get_player_picked_league_percent(len(data)),
                                 current_points = current_points)
     else:
-        return render_template('errorpage.html', error_message = data)
+        if data == "The game is being updated.":
+            return render_template('updating.html', update_message = data) 
+        else:
+            return render_template('errorpage.html', error_message = data)
 
 
 # @app.route('/selectteam', methods=['GET', 'POST'])
