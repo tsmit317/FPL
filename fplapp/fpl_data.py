@@ -33,6 +33,9 @@ class FplData():
         except requests.exceptions.RequestException as err:
             return (f"Uh Oh: Something Else {err}")
         
+        if type(req) is str and req == "The game is being updated.":
+            return req
+        
         return req.json()
     
     # TODO Create new method to check JSON response. Violates SRP
