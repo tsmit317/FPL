@@ -115,9 +115,17 @@ class FplData():
     def count_chips(self, chip_list):
         for i in chip_list:
             self.chip_count_dict[i['chip_name']] += 1
-    
-    # TODO pick one         
+
+
     def set_player_chips(self, chip_json):
+        """
+        Parses json for chips used into dict
+        
+        Parameters:
+            chip_json (JSON object): JSON Object containing info for chips used
+        Returns:
+            list: List of dictionaries
+        """
         return [{'chip_name': self.chip_names[i['name']], 'gw_used': i['event']} for i in chip_json]
 
 
