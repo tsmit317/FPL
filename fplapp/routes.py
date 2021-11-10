@@ -36,11 +36,11 @@ def home():
                                 league_chips = fpl_data.get_member_chip_list(),
                                 player_league_percent = fpl_players.get_player_picked_league_percent(len(data)),
                                 current_points = current_points)
-    else:
-        if data == "The game is being updated.":
-            return render_template('updating.html', update_message = data) 
-        else:
-            return render_template('errorpage.html', error_message = data)
+    elif type(data) == tuple and data[0] == 'Updating':
+        return render_template('updating.html', update_message = data[1]) 
+    
+    elif type(data) == tuple and data[0] == 'Error':
+            return render_template('errorpage.html', error_message = data[1])
 
 
 # @app.route('/selectteam', methods=['GET', 'POST'])
