@@ -36,41 +36,11 @@ def home():
                                 league_chips = fpl_data.get_member_chip_list(),
                                 player_league_percent = fpl_players.get_player_picked_league_percent(len(data)),
                                 current_points = current_points)
+    
     elif type(data) == tuple and data[0] == 'Updating':
         return render_template('updating.html', update_message = data[1]) 
     
     elif type(data) == tuple and data[0] == 'Error':
             return render_template('errorpage.html', error_message = data[1])
 
-
-# @app.route('/selectteam', methods=['GET', 'POST'])
-# def selectteam():
-#     if request.method == 'POST':
-        
-#         request_user_ID = request.form["userID"] 
-        
-        
-#         if league_info == False:
-#             flash('Oh no something went wrong. Please try again!', 'danger')
-#             return redirect(url_for('home'))
-#         else:
-#             return render_template('selectteam.html', league_info = league_info) 
-
-
-# # Currently not being used 
-# @app.route('/check-data', methods=['GET', 'POST'])
-# def process_data():
-#     if request.method == 'POST':
-#         rank = int(request.form['select_league'])
-#         response = ''
-#         if rank == 1:
-#             response = 'YES'
-#         elif rank > 1 and rank <= 5:
-#             response = 'NO'
-#         elif rank > 5:
-#             response = 'LOL'
-
-#         print(rank)
-#         return render_template('amiwinning.html', rank_response = response)
-    
 
