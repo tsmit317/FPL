@@ -19,9 +19,22 @@ class FplData():
 
     
     def request_error_check(self, url):
+        """
+        Checks request response for errors or if FPL API is updating. 
+        
+        Parameters:
+            url (str): Url to request
+        Returns:
+            json or tuple: If there is an error or update message will return a tuple with type and string. Otherwise, returns json object
+        """
+        
         try:
             req = requests.get(url)
             req.raise_for_status()
+            if type(req) is str and req == "The game is being updated.":
+                return ("Updating", "FPL is currently being updated.")
+        
+            return req.json()
         except requests.exceptions.HTTPError as errh:
             return ("Error", f"Http Error: {errh}")
         except requests.exceptions.ConnectionError as errc:
@@ -30,11 +43,6 @@ class FplData():
             return ("Error", f"Timeout Error: {errt}")
         except requests.exceptions.RequestException as err:
             return ("Error", f"Uh Oh: Something Else {err}")
-        
-        if type(req) is str and req == "The game is being updated.":
-            return ("Updating", "FPL is currently being updated.")
-        
-        return req.json()
     
     # TODO Create new method to check JSON response. Violates SRP
     def get_league_users(self, league_id):
