@@ -123,9 +123,17 @@ class FplData():
     # TODO Docstring
     def set_past_seasons(self, past_json):
         return [{'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']} for i in past_json]
-    
-    # TODO Docstring/Refactor
+
+
     def calc_gw_team_value_diff(self, total_value_list):
+        """
+        Calculates total team value difference between gameweeks
+        
+        Parameters:
+            total_value_list (list): List of total team value per gameweeks
+        Returns:
+            list: List containing total value difference between gameweeks
+        """
         return [total_value_list[i] - total_value_list[i-1] if i > 0 else 0 for i in range(len(total_value_list))]
     
     
