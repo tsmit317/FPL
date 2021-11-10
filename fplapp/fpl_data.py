@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import requests
 from pprint import pprint
-
+from collections import Counter
 
 class FplData():
     
@@ -102,10 +102,12 @@ class FplData():
         temp['gw_value_diff'] = self.calc_gw_team_value_diff(temp['total_value'])
         
         return temp
-
+    
+    # TODO pick one
     def set_member_chip_list(self, chip_list, team_name):
         self.member_chip_list.append({'team_name': team_name, 'chips': [i['chip_name'] for i in chip_list]})
-
+    
+    # TODO pick one
     def set_chips_used(self, chip_list, team_name):
         for i in chip_list:
             self.chips_used.append({'team_name': team_name,'chip_name': i['chip_name'], 'gw_used': i['gw_used']})
@@ -113,13 +115,16 @@ class FplData():
     def count_chips(self, chip_list):
         for i in chip_list:
             self.chip_count_dict[i['chip_name']] += 1
-            
+    
+    # TODO pick one         
     def set_player_chips(self, chip_json):
         return [{'chip_name': self.chip_names[i['name']], 'gw_used': i['event']} for i in chip_json]
 
+    # TODO Docstring
     def set_past_seasons(self, past_json):
         return [{'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']} for i in past_json]
     
+    # TODO Docstring/Refactor
     def calc_gw_team_value_diff(self, total_value_list):
         return [total_value_list[i] - total_value_list[i-1] if i > 0 else 0 for i in range(len(total_value_list))]
     
@@ -161,6 +166,7 @@ class FplData():
                 highest_gw_score.append({'team_name': member['team_name'], 'points': max_points, 'gw': member['gw_points'].index(max_points)})     
         return highest_gw_score
 
+    # TODO Docstring refactor
     def set_gw_points(self, member):
         for i in range(1, len(member['gw_points'])):
             if i in self.gw_points:
@@ -168,6 +174,7 @@ class FplData():
             else:
                 self.gw_points[i] = [{'team_name': member['team_name'], 'points': member['gw_points'][i]}]
 
+    # TODO Docstring refactor
     def find_max_points_per_gw(self):
         """Search list of lists of dicts. Ex: gw[0] = [{}{}{}{}]"""
         for k, v in self.gw_points.items():
@@ -176,6 +183,7 @@ class FplData():
                 if i['points'] == max_points:
                     self.max_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
 
+    # TODO Docstring refactor
     def find_min_points_per_gw(self):
         for k, v in self.gw_points.items():
             min_points = min(v, key=lambda x:x['points'])['points']
@@ -183,20 +191,31 @@ class FplData():
                 if i['points'] == min_points:
                     self.min_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
 
+
     def count_gw_leader(self):
-        temp = {i['team_name']: 0 for i in self.league_data}
+        """
+        Counts number times player had most gameweek points
         
+        Returns:
+            dict: Sorted dict with team_name and leader count
+        """
+        temp = {i['team_name']: 0 for i in self.league_data}
         for i in self.max_points_per_gw:
             temp[i['team_name']] += 1
         
         return sorted(temp.items(), key=lambda x: x[1], reverse=True)
 
+
     def count_gw_lowest(self):
+        """
+        Counts number times player had least gameweek points
+        
+        Returns:
+            dict: Sorted dict with team_name and min count
+        """
         temp = {i['team_name']: 0 for i in self.league_data}
-        
         for i in self.min_points_per_gw:
-            temp[i['team_name']] += 1
-        
+            temp[i['team_name']] += 1 
         return sorted(temp.items(), key=lambda x: x[1], reverse=True)
 
     def get_min_points_per_gw(self):
@@ -217,6 +236,7 @@ class FplData():
     def get_chips_used_list(self):
         return sorted(self.chips_used, key=lambda k: k['gw_used'])
     
+    # TODO Docstring refactor
     def check_total_points_updated(self, current_points):
         if self.league_data[0]['total_points'][-1] != (self.league_data[0]['total_points'][-2] + current_points[self.league_data[0]['team_id']]):
             for i in self.league_data:
