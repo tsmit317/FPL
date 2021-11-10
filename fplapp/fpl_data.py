@@ -7,7 +7,7 @@ from pprint import pprint
 class FplData():
     
     def __init__(self):
-        self.league_data = []
+        self.league_data = None
         self.chip_names = {"wildcard": "Wildcard1", "3xc": "Triple-Captain", 'bboost': "Bench-boost"}
         self.chip_count_dict = {'Wildcard1': 0, 'Triple-Captain': 0, 'Bench-boost': 0, 'Free-hit': 0}
         self.chips_used = []
@@ -42,9 +42,9 @@ class FplData():
         if type(league_json_response) is tuple:
             self.league_data = league_json_response
         else:
-            for person in league_json_response['standings']['results']:
-                self.league_data.append({ 'name': person.get('player_name'), 'team_id': person.get('entry'), 
-                                        'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')})
+            self.league_data = [{ 'name': person.get('player_name'), 'team_id': person.get('entry'), 
+                                'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')} 
+                                for person in league_json_response['standings']['results']]
 
     #TODO Create new method to check JSON response. Violates SRP and is SPAGHETTI
     def get_user_history(self, user_id, team_name):
@@ -124,7 +124,7 @@ class FplData():
             self.find_max_points_per_gw()
             self.find_min_points_per_gw()
 
-
+    # TODO can use find max points for gw
     def get_most_points_scored_in_a_gw(self):
         highest_gw_score = [{'team_name': '', 'points': 0, 'gw': 0}]
         for member in self.league_data:
