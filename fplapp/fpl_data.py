@@ -8,7 +8,6 @@ class FplData():
     
     def __init__(self):
         self.league_data = []
-        self.league_member_ids = []
         self.chip_names = {"wildcard": "Wildcard1", "3xc": "Triple-Captain", 'bboost': "Bench-boost"}
         self.chip_count_dict = {'Wildcard1': 0, 'Triple-Captain': 0, 'Bench-boost': 0, 'Free-hit': 0}
         self.chips_used = []
@@ -44,7 +43,6 @@ class FplData():
             self.league_data = league_json_response
         else:
             for person in league_json_response['standings']['results']:
-                self.league_member_ids.append(person.get('entry'))
                 self.league_data.append({ 'name': person.get('player_name'), 'team_id': person.get('entry'), 
                                         'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')})
 
