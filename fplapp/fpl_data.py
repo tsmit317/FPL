@@ -120,8 +120,16 @@ class FplData():
     def set_player_chips(self, chip_json):
         return [{'chip_name': self.chip_names[i['name']], 'gw_used': i['event']} for i in chip_json]
 
-    # TODO Docstring
+
     def set_past_seasons(self, past_json):
+        """
+        Parses json for past seasons into dict
+        
+        Parameters:
+            past_json (JSON object): JSON Object containing info for previous seasons
+        Returns:
+            list: List of dictionaries
+        """
         return [{'year': i['season_name'], 'past_total_points': i['total_points'], 'finishing_rank': i['rank']} for i in past_json]
 
 
