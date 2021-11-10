@@ -243,9 +243,19 @@ class FplData():
 
     def get_chips_used_list(self):
         return sorted(self.chips_used, key=lambda k: k['gw_used'])
-    
-    # TODO Docstring refactor
+
+
     def check_total_points_updated(self, current_points):
+        """
+        Updates total score if game is live
+        
+        Parameters:
+            current_points (dict): Dict of teams and current points from FPL_Players class
+        Returns:
+            list: Sorted and updated league_data list of dicts
+        """
+        # NOTE: Because of the way the FPL API league endpoint is set up. It will only update total points after all the games for the day are completed.
+        # However, the FPL API player endpoint will have live points. 
         if self.league_data[0]['total_points'][-1] != (self.league_data[0]['total_points'][-2] + current_points[self.league_data[0]['team_id']]):
             for i in self.league_data:
                 i['total_points'][-1] = i['total_points'][-2] + current_points[i['team_id']]
