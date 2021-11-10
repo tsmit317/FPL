@@ -44,22 +44,28 @@ class FplData():
         except requests.exceptions.RequestException as err:
             return ("Error", f"Uh Oh: Something Else {err}")
     
-    # TODO Create new method to check JSON response. Violates SRP
-    def get_league_users(self, league_id):
-        league_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/")
-        if type(league_json_response) is tuple:
-            self.league_data = league_json_response
-        else:
-            self.league_data = [{ 'name': person.get('player_name'), 'team_id': person.get('entry'), 
-                                'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')} 
-                                for person in league_json_response['standings']['results']]
-
-    #TODO Create new method to check JSON response. Violates SRP and is SPAGHETTI
-    def get_user_history(self, user_id, team_name):
+    def set_league_user_data(self, league_json_response):
+        """
+        Appends member info dict to league_data list
         
-        history_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{user_id}/history/")
-        if type(history_json_response) is tuple:
-            self.league_data = history_json_response
+        Parameters: 
+            league_json_response (JSON): JSON object containing FPL league standings
+        """
+        self.league_data = [{ 'name': person.get('player_name'), 'team_id': person.get('entry'), 
+                            'team_name': person.get('entry_name'), 'rank': person.get('rank'), 'last_rank': person.get('last_rank')} 
+                            for person in league_json_response['standings']['results']]
+
+    #TODO this is sort of ugly
+    def set_user_history(self, team_name, history_json_response):
+        """
+        Parses history json to dict
+        
+        Parameters:
+            team_name (str): String of league members name
+        
+        Returns:
+            dict: Dictionary of parsed JSON
+        """
 
         temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'gw_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
             'total_bench_points': [0], 'bank': [0], 'gw_transfer_cost': [0], 'total_transfer_cost': [0], 'gw_transfers': [0], 
@@ -118,19 +124,27 @@ class FplData():
         return [total_value_list[i] - total_value_list[i-1] if i > 0 else 0 for i in range(len(total_value_list))]
     
     
-    
-    # TODO Create new method to check JSON response. Violates SRP
     def create_fpl_list(self, league_id):
-        self.get_league_users(league_id)
-        if type(self.league_data[0]) is dict:
-            for member in self.league_data:
-                member.update(self.get_user_history(member['team_id'], member['team_name']))
-                member['max_gw_points'] = max(member['gw_points'])
-                member['max_gw_points_gw'] = member['gw_points'].index(member['max_gw_points'])
-                self.set_gw_points(member)
+        """Sort of a driver for setting all class variables"""
+        league_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/")
+        if type(league_json_response) is tuple:
+            return league_json_response
+        
+        self.set_league_user_data(league_json_response)
+        
+        for member in self.league_data:
+            history_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{member['team_id']}/history/")
+            if type(history_json_response) is tuple:
+                return history_json_response
             
-            self.find_max_points_per_gw()
-            self.find_min_points_per_gw()
+            member.update(self.set_user_history(member['team_name'], history_json_response))
+            member['max_gw_points'] = max(member['gw_points'])
+            member['max_gw_points_gw'] = member['gw_points'].index(member['max_gw_points'])
+            self.set_gw_points(member)
+        
+        self.find_max_points_per_gw()
+        self.find_min_points_per_gw()
+        
 
     # TODO can use find max points for gw
     def get_most_points_scored_in_a_gw(self):
