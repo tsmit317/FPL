@@ -18,30 +18,29 @@ class FplData():
         self.max_points_per_gw = []
         self.min_points_per_gw = []
 
-    # TODO Request does not account for fpl-api updating
-    # When FPL weekly deadline occurs, json returns 'Updating' message for about an hour
+    
     def request_error_check(self, url):
         try:
             req = requests.get(url)
             req.raise_for_status()
         except requests.exceptions.HTTPError as errh:
-            return (f"Http Error: {errh}")
+            return ("Error", f"Http Error: {errh}")
         except requests.exceptions.ConnectionError as errc:
-            return (f"Error Connecting: {errc}")
+            return ("Error", f"Error Connecting: {errc}")
         except requests.exceptions.Timeout as errt:
-            return (f"Timeout Error: {errt}")
+            return ("Error", f"Timeout Error: {errt}")
         except requests.exceptions.RequestException as err:
-            return (f"Uh Oh: Something Else {err}")
+            return ("Error", f"Uh Oh: Something Else {err}")
         
         if type(req) is str and req == "The game is being updated.":
-            return req
+            return ("Updating", "FPL is currently being updated.")
         
         return req.json()
     
     # TODO Create new method to check JSON response. Violates SRP
     def get_league_users(self, league_id):
         league_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/")
-        if type(league_json_response) is str:
+        if type(league_json_response) is tuple:
             self.league_data = league_json_response
         else:
             for person in league_json_response['standings']['results']:
@@ -53,7 +52,7 @@ class FplData():
     def get_user_history(self, user_id, team_name):
         
         history_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{user_id}/history/")
-        if type(history_json_response) is str:
+        if type(history_json_response) is tuple:
             self.league_data = history_json_response
 
         temp = {'gw': [0], 'gw_points':[0],'total_points': [0], 'gw_rank':[0], 'rank_sort':[0], 'overall_rank':[0],'gw_bench_points': [0], 
@@ -112,6 +111,8 @@ class FplData():
     def calc_gw_team_value_diff(self, total_value_list):
         return [total_value_list[i] - total_value_list[i-1] if i > 0 else 0 for i in range(len(total_value_list))]
     
+    
+    
     # TODO Create new method to check JSON response. Violates SRP
     def create_fpl_list(self, league_id):
         self.get_league_users(league_id)
@@ -148,9 +149,9 @@ class FplData():
                 self.gw_points[i] = [{'team_name': member['team_name'], 'points': member['gw_points'][i]}]
 
     def find_max_points_per_gw(self):
+        """Search list of lists of dicts. Ex: gw[0] = [{}{}{}{}]"""
         for k, v in self.gw_points.items():
             max_points = max(v, key=lambda x:x['points'])['points']
-            l = []
             for i in v:
                 if i['points'] == max_points:
                     self.max_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
@@ -158,24 +159,21 @@ class FplData():
     def find_min_points_per_gw(self):
         for k, v in self.gw_points.items():
             min_points = min(v, key=lambda x:x['points'])['points']
-            l = []
             for i in v:
                 if i['points'] == min_points:
                     self.min_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
 
     def count_gw_leader(self):
-        temp = {}
-        for i in self.league_data:
-            temp[i['team_name']] = 0
+        temp = {i['team_name']: 0 for i in self.league_data}
+        
         for i in self.max_points_per_gw:
             temp[i['team_name']] += 1
         
         return sorted(temp.items(), key=lambda x: x[1], reverse=True)
 
     def count_gw_lowest(self):
-        temp = {}
-        for i in self.league_data:
-            temp[i['team_name']] = 0
+        temp = {i['team_name']: 0 for i in self.league_data}
+        
         for i in self.min_points_per_gw:
             temp[i['team_name']] += 1
         
