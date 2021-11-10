@@ -159,20 +159,17 @@ class FplData():
         self.find_min_points_per_gw()
         
 
-    # TODO can use find max points for gw
+
     def get_most_points_scored_in_a_gw(self):
-        highest_gw_score = [{'team_name': '', 'points': 0, 'gw': 0}]
-        for member in self.league_data:
-            max_points = max(member['gw_points'])
-            if max_points > highest_gw_score[0]['points']:
-                highest_gw_score.pop()
-                highest_gw_score.append({'team_name': member['team_name'], 'points':  max_points, 'gw': member['gw_points'].index(max_points)})
+        """
+        Finds the member who scored the most points in a single gw
         
-        for member in self.league_data:
-            max_points = max(member['gw_points'])
-            if max_points == highest_gw_score[0]['points'] and not(member['team_name'] == highest_gw_score[0]['team_name']) and not(member['gw'] == highest_gw_score[0]['gw']):
-                highest_gw_score.append({'team_name': member['team_name'], 'points': max_points, 'gw': member['gw_points'].index(max_points)})     
-        return highest_gw_score
+        Returns:
+            list: List of dicts (if mulitple people have same max)
+        """
+        max_points = max(self.max_points_per_gw, key=lambda x:x['points'])['points']
+        return [member for member in self.max_points_per_gw if member['points'] == max_points]
+        
 
     # TODO Docstring refactor
     def set_gw_points(self, member):
@@ -186,7 +183,7 @@ class FplData():
     def find_max_points_per_gw(self):
         """Search list of lists of dicts. Ex: gw[0] = [{}{}{}{}]"""
         for k, v in self.gw_points.items():
-            max_points = max(v, key=lambda x:x['points'])['points']
+            max_points = max(v, key=lambda x:x['points'])['points'] # max will return the dict so the added points only returns the points
             for i in v:
                 if i['points'] == max_points:
                     self.max_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
