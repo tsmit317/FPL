@@ -99,13 +99,23 @@ caption {
     margin: 0px !important;
 }
 .player-table-font{
-    font-size: 14px;
+    font-size: 12px;
 }
 
+.team-player-table{
+    font-size: 12px;
+}
 .league-table{
     font-size: 14px;
 }
 
+.value-table{
+    font-size: 12px;
+}
+
+.seasons-table{
+    font-size: 12px;
+}
 
 .prev-pos{
     font-size: 12px;
