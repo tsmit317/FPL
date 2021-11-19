@@ -163,7 +163,7 @@
       </div>
       <div class="container col">
       <!--Past Seasons Table-->
-        <table class="table table-striped table-dark table-hover league-table">
+        <table class="table table-striped table-dark table-hover league-table" >
           <thead>
             <tr >
               <th colspan="2" class="text-center">Season History</th>
@@ -503,7 +503,7 @@
                 <p  class="text-white text-center">Ri¢hie rich</p>
                 {%endif%}
                   
-                  <table class="table table-striped table-dark table-hover">
+                  <table class="table table-sm table-striped table-dark table-hover">
                   <thead>
                     <tr>
                       <th scope="col">Game Week</th>
@@ -544,7 +544,7 @@
   </div>
 {% endfor %}
 
-
+<!-- Member Player List Modal -->
 {% for member in fpl_players %}
   <div class="modal fade" id="playerListModal{{member.team_id}}" tabindex="-1" role="dialog" aria-labelledby="playerListModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -587,15 +587,15 @@
                         <tr class="align-middle player-table-font">
                           <td class="justify-content-center text-nowrap">
                             {% if player['sub_in'] %}
-                                <span class="up-arrow">⮝ </span>
+                                <span class="up-arrow" data-toggle="tooltip" data-placement="top" title="Sub On">⮝ </span>
                             {% elif player['sub_out'] %}
-                                <span class="down-arrow">⮟ </span>
+                                <span class="down-arrow" data-toggle="tooltip" data-placement="top" title="Sub Off">⮟ </span>
                             {% endif %}
                           {{"Ronaldo" if player['second_name'] == "dos Santos Aveiro" else player['second_name'] }} 
                             {% if player['is_captain'] == True %}
-                              <span class="align-text-top"><img  src="static/images/captain-icon.png" class="captain-vice-icon"></span> 
+                              <span data-toggle="tooltip" data-placement="top" title="Captain"><i class="bi bi-shield-fill" style="color:#d4af37;"></i></span> 
                             {% elif player['is_vice_captain'] == True%}
-                              <span class="align-text-top"><img  src="static/images/vc-icon.png" class="captain-vice-icon"></span> 
+                              <span data-toggle="tooltip" data-placement="top" title="Vice-Captain"><i class="bi bi-shield-shaded" style="color:#aaa9ad;" ></i></span> 
                             {%endif%}
                           </td>
                           
