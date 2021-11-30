@@ -19,6 +19,7 @@ def home():
         fpl_players.set_team_player_list(most_recent_gw) 
         fpl_players.subtract_tranfer_hits_from_current_points(data)
         
+        
         current_points = fpl_players.get_current_points()
         league_data = fpl_data.check_total_points_updated(current_points)
         return render_template('home.html', 

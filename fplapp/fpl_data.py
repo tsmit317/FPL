@@ -29,9 +29,13 @@ class FplData():
         """
         
         try:
+            print('in try')
             req = requests.get(url)
+           
             req.raise_for_status()
-            if type(req) is str and req == "The game is being updated.":
+            
+            
+            if str(req.json()) == "The game is being updated.":
                 return ("Updating", "FPL is currently being updated.")
         
             return req.json()
@@ -156,23 +160,26 @@ class FplData():
     def create_fpl_list(self, league_id):
         """Sort of a driver for setting all class variables"""
         league_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings/")
+        
         if type(league_json_response) is tuple:
-            return league_json_response
-        
-        self.set_league_user_data(league_json_response)
-        
-        for member in self.league_data:
-            history_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{member['team_id']}/history/")
-            if type(history_json_response) is tuple:
-                return history_json_response
+            self.league_data = league_json_response
+        else:
+            self.set_league_user_data(league_json_response)
             
-            member.update(self.set_user_history(member['team_name'], history_json_response))
-            member['max_gw_points'] = max(member['gw_points'])
-            member['max_gw_points_gw'] = member['gw_points'].index(member['max_gw_points'])
-            self.set_gw_points(member)
-        
-        self.find_max_points_per_gw()
-        self.find_min_points_per_gw()
+            for member in self.league_data:
+                history_json_response = self.request_error_check(f"https://fantasy.premierleague.com/api/entry/{member['team_id']}/history/")
+                
+                if type(history_json_response) is tuple or history_json_response == None:
+                    self.league_data =  history_json_response
+                    break
+                
+                member.update(self.set_user_history(member['team_name'], history_json_response))
+                member['max_gw_points'] = max(member['gw_points'])
+                member['max_gw_points_gw'] = member['gw_points'].index(member['max_gw_points'])
+                self.set_gw_points(member)
+            
+            self.find_max_points_per_gw()
+            self.find_min_points_per_gw()
         
 
 
@@ -239,6 +246,7 @@ class FplData():
             temp[i['team_name']] += 1 
         return sorted(temp.items(), key=lambda x: x[1], reverse=True)
 
+    # TODO remove getters - bloat 
     def get_min_points_per_gw(self):
         return self.min_points_per_gw
 
