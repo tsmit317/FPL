@@ -96,6 +96,7 @@ class FplData():
             temp['team_value'].append(float("{0:.2f}".format(temp['total_value'][-1] - temp['bank'][-1])))
         
         temp['past_seasons'] = self.set_past_seasons(history_json_response['past'])
+        temp['total_past_seasons'] = len(temp['past_seasons'])
         temp['chips'] = self.set_player_chips(history_json_response['chips'])
         self.count_chips(temp['chips'])
         self.set_chips_used(temp['chips'], team_name)
