@@ -29,11 +29,8 @@ class FplData():
         """
         
         try:
-            print('in try')
             req = requests.get(url)
-           
             req.raise_for_status()
-            
             
             if str(req.json()) == "The game is being updated.":
                 return ("Updating", "FPL is currently being updated.")
