@@ -111,7 +111,7 @@ class FplPlayers():
         return self.player_picked_league_count
 
     def get_player_picked_league_percent(self, member_count):
-        return {player_id: (count/member_count)*100 for player_id, count in self.player_picked_league_count.items()}
+        return {player_id: int((count/member_count)*100) for player_id, count in self.player_picked_league_count.items()}
     
     def subtract_tranfer_hits_from_current_points(self, league_list):
         for i in league_list:
