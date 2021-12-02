@@ -320,7 +320,7 @@
                   <td class="align-middle">{{chip.team_name}}</td>
                   <td  class="align-middle text-start center-chip-icon">
                   {% for item in chip.chips%}
-                      <img src="static/images/{{item}}-icon3.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{item}}"> 
+                      <img src="static/images/{{item}}-icon2.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{item}}"> 
                   {% endfor %}
                   </td>
                   
@@ -411,7 +411,7 @@
                             <td class='align-middle center-chip-icon'>
                             {% for chip in member['chips'] %}
                               {% if i == chip['gw_used'] %}
-                              <img src="static/images/{{chip['chip_name']}}-icon.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip['chip_name']}}">
+                              <img src="static/images/{{chip['chip_name']}}-icon2.png" class="chip-icon" data-toggle="tooltip" data-placement="top" title="{{chip['chip_name']}}">
                               {% endif %}
                             {% endfor %}
                             </td>
@@ -591,7 +591,7 @@
                             {% elif player['sub_out'] %}
                                 <span class="down-arrow" data-toggle="tooltip" data-placement="top" title="Sub Off">⮟ </span>
                             {% endif %}
-                          {{"Ronaldo" if player['second_name'] == "dos Santos Aveiro" else player['second_name'] }} 
+                          {{player['web_name']}} 
                             {% if player['is_captain'] == True %}
                               <span data-toggle="tooltip" data-placement="top" title="Captain"><i class="bi bi-shield-fill" style="color:#d4af37;"></i></span> 
                             {% elif player['is_vice_captain'] == True%}
