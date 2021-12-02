@@ -31,7 +31,7 @@ class FplPlayers():
         elements_types_df = pd.DataFrame(req['element_types'])
         self.teams_df = pd.DataFrame(req['teams'])
 
-        slim_elements_df = elements_df[['id','second_name','first_name','team','event_points','form','element_type',
+        slim_elements_df = elements_df[['id','second_name','first_name', 'web_name', 'team','event_points','form','element_type',
                                         'selected_by_percent','now_cost','minutes','transfers_in','transfers_out','value_season','total_points']]
         slim_elements_df['position'] = slim_elements_df.element_type.map(elements_types_df.set_index('id').singular_name_short)
         slim_elements_df['team'] = slim_elements_df.team.map(self.teams_df.set_index('id').short_name)
