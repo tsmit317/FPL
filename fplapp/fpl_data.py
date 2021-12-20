@@ -8,7 +8,7 @@ class FplData():
     
     def __init__(self):
         self.league_data = None
-        self.chip_names = {"wildcard": "Wildcard1", "3xc": "Triple-Captain", 'bboost': "Bench-boost"}
+        self.chip_names = {"wildcard": "Wildcard1", "3xc": "Triple-Captain", 'bboost': "Bench-boost", "freehit": "Free-hit"}
         self.chip_count_dict = {'Wildcard1': 0, 'Triple-Captain': 0, 'Bench-boost': 0, 'Free-hit': 0}
         self.chips_used = []
         self.member_chip_list = []
