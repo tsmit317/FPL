@@ -106,7 +106,7 @@ class FplData():
     
     # TODO pick one
     def set_member_chip_list(self, chip_list, team_name):
-        self.member_chip_list.append({'team_name': team_name, 'chips': [i['chip_name'] for i in chip_list]})
+        self.member_chip_list.append({'team_name': team_name, 'chips': [(i['chip_name'], i['gw_used']) for i in chip_list]})
     
     # TODO pick one
     def set_chips_used(self, chip_list, team_name):
