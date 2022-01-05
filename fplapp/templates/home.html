@@ -39,7 +39,7 @@
                   {% else %}
                     <td>-</td>
                   {% endif %}
-                    <td>{{member.team_name}}</td>
+                    <td data-toggle="tooltip" data-placement="top" title="{{member.name}}">{{member.team_name}}</td>
                     <td class="text-end">{{current_points[member.team_id]}}</td>
                     
                     <td class="text-end">{{member.total_points[-1]}}</td> 
