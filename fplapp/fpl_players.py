@@ -3,11 +3,13 @@ import requests
 import numpy as np
 
 class FplPlayers():
+    
     def __init__(self):
         self.player_list = []
         self.teams_df = None
         self.player_picked_league_count = {}
         self.current_points_dict = {}
+    
     def request_error_check(self, url):
         try:
             req = requests.get(url)
