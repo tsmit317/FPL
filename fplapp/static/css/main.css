@@ -95,7 +95,7 @@ caption {
 }
 
 .table-wrapper {
-    max-height: 350px;
+    max-height: 456px;
     width: 100%;
     overflow: auto;
     display:inline-block;
