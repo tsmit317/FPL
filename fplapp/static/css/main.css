@@ -2,16 +2,17 @@ body{
     background-color: rgb(191, 191, 191); 
 }
 
-.rank-response{
+.rank-response { 
     font-weight: bold;
 }
 
-.main_wrapper{
+.main_wrapper {
     display: flex;
     flex-wrap: row;
     justify-content: center;
 }
-.canvas_wrapper{
+
+.canvas_wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,7 +24,8 @@ body{
     border-right: 1px solid black;
     border-top: 1px solid black;
 }
-.canvas{
+
+.canvas {
     width: 100%;
     height: auto;
     /* background-color: #22293d; */
