@@ -127,7 +127,12 @@ class FplData():
         Returns:
             list: List of dictionaries
         """
-        return [{'chip_name': self.chip_names[i['name']], 'gw_used': i['event']} for i in chip_json]
+        return [ 
+            {'chip_name': 'Wildcard2', 'gw_used': i['event'] } 
+            if (i['name'] == 'wildcard' and int(i['event']) > 22) 
+            else {'chip_name': self.chip_names[i['name']], 'gw_used': i['event']} 
+            for i in chip_json 
+            ]
 
 
     def set_past_seasons(self, past_json):
