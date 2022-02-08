@@ -32,7 +32,7 @@ class FplData():
             req = requests.get(url)
             
             if str(req.json()) == "The game is being updated.":
-                return ("Updating", "FPL is currently being updated.")
+                return ("Updating", "FPL API is currently being updated.")
         
             return req.json()
         except requests.exceptions.HTTPError as errh:
