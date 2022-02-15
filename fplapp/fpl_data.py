@@ -9,7 +9,7 @@ class FplData():
     def __init__(self):
         self.league_data = None
         self.chip_names = {"wildcard": "Wildcard1", "3xc": "Triple-Captain", 'bboost': "Bench-boost", "freehit": "Free-hit"}
-        self.chip_count_dict = {'Wildcard1': 0, 'Wildcard2':0 ,'Triple-Captain': 0, 'Bench-boost': 0, 'Free-hit': 0}
+        self.chip_count_dict = {'Wildcard1': 0, 'Wildcard2': 0 ,'Triple-Captain': 0, 'Bench-boost': 0, 'Free-hit': 0}
         self.chips_used = []
         self.member_chip_list = []
         self.member_highest_gw_score = {}
@@ -204,6 +204,7 @@ class FplData():
             else:
                 self.gw_points[i] = [{'team_name': member['team_name'], 'points': member['gw_points'][i]}]
 
+
     # TODO Docstring refactor
     def find_max_points_per_gw(self):
         """Search list of lists of dicts. Ex: gw[0] = [{}{}{}{}]"""
@@ -212,6 +213,7 @@ class FplData():
             for i in v:
                 if i['points'] == max_points:
                     self.max_points_per_gw.append({'gw': k, 'team_name': i['team_name'], 'points': i['points']})
+
 
     # TODO Docstring refactor
     def find_min_points_per_gw(self):
@@ -247,6 +249,7 @@ class FplData():
         for i in self.min_points_per_gw:
             temp[i['team_name']] += 1 
         return sorted(temp.items(), key=lambda x: x[1], reverse=True)
+
 
     # TODO remove getters - bloat 
     def get_min_points_per_gw(self):
