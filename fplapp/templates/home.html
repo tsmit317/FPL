@@ -622,7 +622,7 @@
                           <td class="text-center">{{player['form']}}</td>
                           <td class="text-center">{{player['now_cost'] / 10}} </td>
                           <td class="text-center">{{player['selected_by_percent']}} </td>
-                          <td class="text-center">{{player_league_percent[player['id']]}}%</td>
+                          <td class="text-center">{{player_league_percent[player['id']]}}</td>
                           {% if member.is_current_gw == member.gw%}
                             <td><div class="container rounded text-nowrap text-center" style="{{player['opponent_diff_style']}}">{{player['opponent']}} {{home_away}}</div></td>
                           {% else %}
