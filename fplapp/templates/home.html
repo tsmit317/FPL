@@ -599,9 +599,9 @@
                         <tr class="align-middle player-table-font">
                           <td class="justify-content-center text-nowrap">
                             {% if player['sub_in'] %}
-                                <span class="up-arrow" data-toggle="tooltip" data-placement="top" title="Sub On">⮝ </span>
+                                <span class="up-arrow" data-toggle="tooltip" data-placement="top" title="Sub On"><i class="bi bi-caret-up-fill"></i> </span>
                             {% elif player['sub_out'] %}
-                                <span class="down-arrow" data-toggle="tooltip" data-placement="top" title="Sub Off">⮟ </span>
+                                <span class="down-arrow" data-toggle="tooltip" data-placement="top" title="Sub Off"><i class="bi bi-caret-down-fill"></i></span>
                             {% endif %}
                           {{player['web_name']}} 
                             {% if player['is_captain'] == True %}
